@@ -224,5 +224,36 @@ join  bg63_site_tmplvar_contentvalues cv
         }
 
     }
+
+
+    function GetProductInfo($product_id)
+    {
+        global $modx;
+        global $table_prefix;
+
+        $sql = "select * from " . $table_prefix . "site_content where id=" . $product_id;
+        foreach ($modx->query($sql) as $row) {
+            $product = new stdClass();
+            $product->id = $row['id'];
+            $product->introtext = $row['introtext'];
+            $product->description = $row['description'];
+            $product->title = $row['pagetitle'];
+            $url = $row['uri'];
+            //теперь дополнительные поля
+            // - 1 - если это подарки, то тут нету дополнительных цен
+            $tv = $this->GetContentTV($product_id);
+            $product->tv = $tv;
+            if ($type == 2) {
+                $product->price = $tv['PriceBuket'];
+            }
+            else {
+                //пербераем все цены и картинки
+                $product->price = $this->GetProductPrice($product_id);
+            }
+        }
+        return $product;
+
+    }
+
 }
 

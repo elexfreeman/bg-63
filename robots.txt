@@ -1,0 +1,20 @@
+User-agent: Yandex
+Disallow: /
+Disallow: /core/
+Disallow: /connectors/
+Disallow: /manager/
+Disallow: /assets/components/
+Disallow: /index.php
+Disallow: *?
+Host: site.ru
+Sitemap: http://site.ru/sitemap.xml
+
+User-agent: *
+Disallow: /
+Disallow: /core/
+Disallow: /connectors/
+Disallow: /manager/
+Disallow: /assets/components/
+Disallow: /index.php
+Disallow: *?
+Sitemap: http://site.ru/sitemap.xml

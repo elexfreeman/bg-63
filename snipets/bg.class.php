@@ -226,6 +226,7 @@ join  bg63_site_tmplvar_contentvalues cv
     }
 
 
+    //Инфо по продукту
     function GetProductInfo($product_id)
     {
         global $modx;
@@ -243,13 +244,7 @@ join  bg63_site_tmplvar_contentvalues cv
             // - 1 - если это подарки, то тут нету дополнительных цен
             $tv = $this->GetContentTV($product_id);
             $product->tv = $tv;
-            if ($type == 2) {
-                $product->price = $tv['PriceBuket'];
-            }
-            else {
-                //пербераем все цены и картинки
-                $product->price = $this->GetProductPrice($product_id);
-            }
+
         }
         return $product;
 

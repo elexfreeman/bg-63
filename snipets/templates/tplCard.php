@@ -49,6 +49,8 @@ if($cc>0)
                             {
                                 $kk=explode("_",$key1);
                                 $product_id=$kk[1];
+                                $product=$this->GetProductInfo($product_id);
+
 /*
                                 $product=$products->GetProductInfo($product_id);
                                 $price=$products->GetProductMainPrice($product_id);
@@ -86,19 +88,19 @@ if($cc>0)
 
                                 <div>
                                     Свадебный салон
-                                    <br>ID 2551
+                                    <br>ID <?php echo $product->title; ?>
                                 </div>
 
                                 <div>
-                                    Октябрьский район
+                                    <?php echo $product->tv['mestopolojenie']; ?>
                                 </div>
 
                                 <div>
-                                    S=33 кв. м. В аренде, 37 000 руб/мес.
+                                    <!-- S=33 кв. м. В аренде, 37 000 руб/мес. -->
                                 </div>
 
                                 <div>
-                                    <span class="price">1 750 000 руб.</span>
+                                    <span class="price"><?php echo $product->tv['stoimost']; ?> <?php echo $product->tv['razm_stoimosti']; ?>.</span>
                                 </div>
                 </div>
                     <?php

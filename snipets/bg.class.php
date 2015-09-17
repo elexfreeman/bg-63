@@ -143,6 +143,20 @@ join  bg63_site_tmplvar_contentvalues cv
     //возвращает кол-во продуктов в корзине
     function GetCardCountProduct()
     {
+        $cc=0;
+        foreach($_SESSION as $key=>$value)
+        {
+            if(substr($key,0,3)=='pro') $cc=$cc+$value;
+            //echo $key." ".$value." ".substr($key,0,3);
+
+
+        }
+        return $cc;
+    }
+
+    function GlobalSnipet($scriptProperties)
+    {
+        global $modx;
 
     }
 }

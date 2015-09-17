@@ -10,7 +10,33 @@
 //Класс ждя работы с front-end
 class BG
 {
-  // объявление метода
+
+    function GetContentTV($content_id)
+    {
+        global $modx;
+        global $table_prefix;
+
+
+        $sql_tv = "select
+                            tv.name,
+                            cv.value
+
+                            from " . $table_prefix . "site_tmplvar_contentvalues cv
+
+                            join " . $table_prefix . "site_tmplvars tv
+                            on tv.id=cv.tmplvarid
+
+                            where cv.contentid=" . $content_id;
+
+        // echo $sql_tv;
+        foreach ($modx->query($sql_tv) as $row_tv) {
+            $tv[$row_tv['name']] = $row_tv['value'];
+        }
+        return $tv;
+    }
+
+
+    // объявление метода
   public function MainPage()
   {
 
@@ -130,13 +156,13 @@ join  bg63_site_tmplvar_contentvalues cv
         if(isset($_SESSION['product_'.$_GET['product_id']]))
         {
             unset($_SESSION['product_'.$_GET['product_id']]);
-            echo   json_encode(array("status"=>"0","count"=>$this->GetCardCountProduct())); //удалили из корзины
+            echo   json_encode(array("status"=>"0","count"=>$this->GetCardCountProduct(),"panel_text"=> $this->Panel_GetCardCount())); //удалили из корзины
 
         }
         else
         {
             $_SESSION['product_'.$_GET['product_id']]=mysql_escape_string($_GET['product_count']);
-            echo   json_encode(array("status"=>"1","count"=>$this->GetCardCountProduct())); //добавили
+            echo   json_encode(array("status"=>"1","count"=>$this->GetCardCountProduct(),"panel_text"=> $this->Panel_GetCardCount())); //добавили
         }
     }
 
@@ -172,7 +198,7 @@ join  bg63_site_tmplvar_contentvalues cv
         }
         else $count='У Вас '.$count.' объектов';
 
-        echo "У Вас 2 объекта";
+        return $count;
     }
 
     function GlobalSnipet($scriptProperties)
@@ -182,7 +208,7 @@ join  bg63_site_tmplvar_contentvalues cv
         //Колл-во продуктов в корзине
         if($scriptProperties['action']=='Panel_GetCardCount')
         {
-           $this->Panel_GetCardCount();
+           echo $this->Panel_GetCardCount();
         }
 
     }

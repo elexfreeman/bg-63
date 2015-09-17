@@ -6,6 +6,8 @@
  * Date: 01.09.15
  * Time: 11:41
  */
+
+//Класс ждя работы с front-end
 class BG
 {
   // объявление метода
@@ -87,7 +89,7 @@ join  bg63_site_tmplvar_contentvalues cv
               <li onclick="ProductDescription(<?php echo $product['uri']; ?>);">
                 <i class="product-icons product-icons-list"></i><span>Подробнее</span>
               </li>
-              <li><i class="product-icons product-icons-bag"></i><span>В портфель</span></li>
+              <li onclick="AddToCard(<?php echo $product['id']; ?>);"><i class="product-icons product-icons-bag"></i><span>В портфель</span></li>
               <li><i class="product-icons product-icons-money"></i><span>Поторговаться</span></li>
               <li><i class="product-icons product-icons-printer"></i><span>Распечатать</span></li>
             </ul>

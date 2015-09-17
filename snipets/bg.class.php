@@ -201,6 +201,14 @@ join  bg63_site_tmplvar_contentvalues cv
         return $count;
     }
 
+    function ShowCard()
+    {
+        global $modx;
+        global $table_prefix;
+        include "templates/tplCard.php";
+    }
+
+
     function GlobalSnipet($scriptProperties)
     {
         global $modx;
@@ -209,6 +217,10 @@ join  bg63_site_tmplvar_contentvalues cv
         if($scriptProperties['action']=='Panel_GetCardCount')
         {
            echo $this->Panel_GetCardCount();
+        }
+        elseif($scriptProperties['action']=='ShowCard')
+        {
+            $this->ShowCard();
         }
 
     }

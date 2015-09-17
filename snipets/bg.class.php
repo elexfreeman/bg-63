@@ -122,5 +122,28 @@ join  bg63_site_tmplvar_contentvalues cv
 
 
   }
+
+
+    function AddToCard($product_id,$count=1)
+    {
+        global $modx;
+        if(isset($_SESSION['product_'.$_GET['product_id']]))
+        {
+            unset($_SESSION['product_'.$_GET['product_id']]);
+            echo   json_encode(array("status"=>"0","count"=>$this->GetCardCountProduct())); //удалили из корзины
+
+        }
+        else
+        {
+            $_SESSION['product_'.$_GET['product_id']]=mysql_escape_string($_GET['product_count']);
+            echo   json_encode(array("status"=>"1","count"=>$this->GetCardCountProduct())); //добавили
+        }
+    }
+
+    //возвращает кол-во продуктов в корзине
+    function GetCardCountProduct()
+    {
+
+    }
 }
 

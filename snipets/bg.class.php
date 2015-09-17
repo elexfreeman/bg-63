@@ -154,9 +154,36 @@ join  bg63_site_tmplvar_contentvalues cv
         return $cc;
     }
 
+    //Колл-во продуктов в корзине
+    function Panel_GetCardCount()
+    {
+        $count=$this->GetCardCountProduct();
+        if($count==0)
+        {
+            $count='Пусто';
+        }
+        elseif($count==1)
+        {
+            $count='У Вас 2 объект';
+        }
+        elseif(($count==2)or($count==3)or($count==4))
+        {
+            $count='У Вас '.$count.' объекта';
+        }
+        else $count='У Вас '.$count.' объектов';
+
+        echo "У Вас 2 объекта";
+    }
+
     function GlobalSnipet($scriptProperties)
     {
         global $modx;
+
+        //Колл-во продуктов в корзине
+        if($scriptProperties['action']=='Panel_GetCardCount')
+        {
+           $this->Panel_GetCardCount();
+        }
 
     }
 }

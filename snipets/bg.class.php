@@ -10,6 +10,14 @@
 //Класс ждя работы с front-end
 class BG
 {
+
+    function FilterForm()
+    {
+        global $modx;
+        global $table_prefix;
+
+    }
+
     function Search()
     {
         global $modx;

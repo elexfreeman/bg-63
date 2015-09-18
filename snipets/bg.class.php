@@ -10,6 +10,51 @@
 //Класс ждя работы с front-end
 class BG
 {
+    function Search()
+    {
+        global $modx;
+        global $table_prefix;
+        /*
+         *
+-- ----------------------------------
+
+select * from
+-- 			okypaemost -------------
+(
+select
+    tv.name okypaemost_title,
+    cv.value okypaemost,
+    cv.contentid okypaemost_content
+
+    from bg63_site_tmplvar_contentvalues cv
+
+    join bg63_site_tmplvars tv
+    on tv.id=cv.tmplvarid
+
+    where tv.name='okypaemost'
+) a
+-- ----------------------------------
+join
+(
+-- 			okypaemost -------------
+select
+    tv.name stoimost_title,
+    cv.value stoimost,
+    cv.contentid stoimost_content
+
+    from bg63_site_tmplvar_contentvalues cv
+
+    join bg63_site_tmplvars tv
+    on tv.id=cv.tmplvarid
+
+    where tv.name='stoimost'
+) b
+on a.okypaemost_content=b.stoimost_content
+-- ----------------------------------
+
+         *
+         * */
+    }
 
     function GetContentTV($content_id)
     {

@@ -38,6 +38,8 @@ if($cc>0)
                     $summa=0;
 
 
+
+
                     /*получаем список товаров в корзине*/
                     foreach($_SESSION as $key1=>$value1)
                     {
@@ -50,38 +52,10 @@ if($cc>0)
                                 $kk=explode("_",$key1);
                                 $product_id=$kk[1];
                                 $product=$this->GetProductInfo($product_id);
-                              /*  echo "<pre>";
+
+                                echo "<pre>";
                                 print_r($product);
-                                echo "</pre>";*/
-/*
-                                $product=$products->GetProductInfo($product_id);
-                                $price=$products->GetProductMainPrice($product_id);
-                                //print_r($price);
-                                //echo $key1." ".$sql."<br>";
-                                ?>
-                                <tr>
-                                    <td><img src="<?php echo '/files/goods/'.$price->img1; ?>"></td>
-                                    <td>Название букета “<?php echo $product->title; ?>”</td>
-                                    <td><?php
-
-
-
-                                        echo $price->price;
-                                        $summa+=( $price->price*$value1);
-
-
-                                        ?> руб.</td>
-                                    <td><input type="text" value="<?php echo $value1;?>" id="product_count_<?php echo $product->id;; ?>"                                   onchange="CardProductChangeCount(<?php echo $row['id']; ?>);"
-                                            ></td>
-                                    <td><?php echo  $price->price*$value1;
-
-                                        ?> руб.</td>
-                                    <td><span class="card_product_delete_<?php echo $product->id;; ?>" onclick="CardProductDelete(<?php echo $product->id;; ?>);">
-                                <img src="/site/tpl/img/cross.png"></span></td>
-                                </tr>
-                            <?php
-                                */
-
+                                echo "</pre>";
                                 ?>
                 <div class="cart_product_row">
                                 <div>

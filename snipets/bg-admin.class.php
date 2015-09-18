@@ -1814,4 +1814,9 @@ where cv.contentid=".$row['id'];
 
     }
 
+    function SphereList()
+    {
+
+    }
+
 }

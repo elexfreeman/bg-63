@@ -17,7 +17,7 @@ if($cc>0)
 
             <p class="cart_info"><span><i class="cart-list-icons cart-list-icons-print"></i> Распечатать список объектов</span> <span><i class="cart-list-icons cart-list-icons-send"></i> Отправить на почту</span></p>
 
-            <p class="sub_title">Срочная продажа</p>
+           <!--  <p class="sub_title">Срочная продажа</p> -->
 
             <div class="cart_product_list">
                 <div class="cart_product_row">
@@ -50,7 +50,9 @@ if($cc>0)
                                 $kk=explode("_",$key1);
                                 $product_id=$kk[1];
                                 $product=$this->GetProductInfo($product_id);
-
+                              /*  echo "<pre>";
+                                print_r($product);
+                                echo "</pre>";*/
 /*
                                 $product=$products->GetProductInfo($product_id);
                                 $price=$products->GetProductMainPrice($product_id);
@@ -87,8 +89,8 @@ if($cc>0)
                                 </div>
 
                                 <div>
-                                    Свадебный салон
-                                    <br>ID <?php echo $product->title; ?>
+                                    <?php echo $product->title; ?>
+                                    <br>ID <?php echo $product->id; ?>
                                 </div>
 
                                 <div>
@@ -96,11 +98,12 @@ if($cc>0)
                                 </div>
 
                                 <div>
+                                    <?php echo $product->tv['nedvijimost']; ?>
                                     <!-- S=33 кв. м. В аренде, 37 000 руб/мес. -->
                                 </div>
 
                                 <div>
-                                    <span class="price"><?php echo $product->tv['stoimost']; ?> <?php echo $product->tv['razm_stoimosti']; ?>.</span>
+                                    <span class="price"><?php echo $product->tv['stoimost']; ?> <?php echo $product->tv['razm_stoimosti']; ?></span>
                                 </div>
                 </div>
                     <?php

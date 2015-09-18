@@ -21,7 +21,15 @@
         <div class="filter_content">
 
             <form id="filter_form">
-                [[$search]]
+                <div class="search_wrap hidden-xs">
+                    <div class="search">
+                        <div id="search_form">
+                            <input type="text" name="search" value="" placeholder="Введите ID или название объекта">
+
+                            <button type="submit" class="search_button" value=""><i class="filter-icons filter-icons-search"></i></button>
+                        </div>
+                    </div>
+                </div>
                 <div class="visible-xs napBisnes">
                     <select name="bisnes" id="bisnes">
                         <option value="0">Выберите направления бизнеса</option>

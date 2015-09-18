@@ -15,7 +15,7 @@ class BG
     {
         global $modx;
         global $table_prefix;
-
+        include "templates/tplFiltrForm.php";
     }
 
     function Search()
@@ -274,6 +274,10 @@ join  bg63_site_tmplvar_contentvalues cv
         elseif($scriptProperties['action']=='ShowCard')
         {
             $this->ShowCard();
+        }
+        elseif($scriptProperties['action']=='FilterForm')
+        {
+            $this->FilterForm();
         }
 
     }

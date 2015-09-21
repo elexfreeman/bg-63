@@ -89,7 +89,7 @@
                 <div class="filter_trend hidden-xs">
                     <p class="title">Какие направления Вас интересуют?</p>
 
-                    <ul class="trend_list">
+                    <ul class="trend_list" id="trends">
 
                         <?php
                         $spheres=$this->SphereList();
@@ -132,7 +132,7 @@
 
                             <div class="filter_trend hidden-xs">
                                 <!--Самара-->
-                                <ul style="margin-left: 0; margin-top: 20px;" class="trend_list">
+                                <ul style="margin-left: 0; margin-top: 20px;" class="trend_list" id="r-samara">
                                    <li>Волжский</li>
                                    <li>Железнодорожный</li>
                                    <li>Кировский</li>
@@ -151,7 +151,7 @@
                         <div>
                             <div class="filter_trend hidden-xs">
                                 <!--Тольяти-->
-                                <ul style="margin-left: 0; margin-top: 20px;" class="trend_list">
+                                <ul style="margin-left: 0; margin-top: 20px;" class="trend_list" id="r-toglaty">
                                     <li>Магазины непродовольственных товаров</li>
                                     <li>Строительство</li>
                                     <li>Магазины продовольственных товаров</li>
@@ -165,7 +165,7 @@
                         <div>
                             <div class="filter_trend hidden-xs">
                                 <!--Прочее-->
-                                <ul style="margin-left: 0; margin-top: 20px;" class="trend_list">
+                                <ul style="margin-left: 0; margin-top: 20px;" class="trend_list" id="r-diff">
                                     <li>п.Воскресенка</li>
                                     <li>с.Старый Аманак</li>
                                     <li>Самарская область, Алексеевский район</li>
@@ -225,7 +225,7 @@
                     </div>
 
 
-                    <button class="button-search" onclick="Search();">Поиск</button>
+                    <button class="button-search" onclick="Search();" type="button">Поиск</button>
 
                 </div>
 

@@ -21,7 +21,17 @@ function AddToCard(product_id)
     ); //$.get  END
 }
 
+//Поиск товаров
 function Search()
 {
+    $('.sphere').each(function(i,elem) {
+        //console.info($(elem).text(),i);
+        if ($(elem).hasClass("active"))
+        {
+            console.info($(elem).html(),i);
+        }
+    });
+
+
 
 }

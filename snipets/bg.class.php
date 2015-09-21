@@ -155,60 +155,25 @@ on a.okypaemost_content=b.stoimost_content
 
 ) res
 where res.stoimost>330000
-)";
 
-        echo $sql;
 
+) limit 100";
+
+       // echo $sql;
+
+
+        $prd='';
+        $i=0;
         foreach ($modx->query($sql) as $product)
         {
-            $product=$this->GetProductInfo($product['id']);
-            ?>
-
-
-            <div class="product_item">
-                <div class="product_title">
-                    <?php echo $product->title; ?>
-                    <span>id <?php echo $product->id; ?></span>
-                </div>
-                <div class="product_img">
-                    <div class="product_img_list">
-                        <div class="product_img_list_layer"></div>
-                        <div class="prevSlider">
-                            <div class="item"></div>
-                            <div class="item"><img src="<?php echo "/UpLoad/" . $product->id . "/0.jpg"; ?>" alt=""></div>
-                            <div class="item"></div>
-                        </div>
-                    </div>
-
-                    <div class="product_buy_info" style="display:none">
-                        <i class="product-icons product-icons-flag"></i> Срочная продажа
-                    </div>
-
-                    <div class="product_buy_buttons">
-                        <ul class="product_buy_buttons_list" id="product_id_<?php echo $product->id; ?>">
-                            <li onclick="ProductDescription(<?php echo $product->url; ?>);">
-                                <i class="product-icons product-icons-list"></i><span>Подробнее</span>
-                            </li>
-                            <li onclick="AddToCard(<?php echo $product->id; ?>);"><i class="product-icons product-icons-bag"></i><span>В портфель</span></li>
-                            <li><i class="product-icons product-icons-money"></i><span>Поторговаться</span></li>
-                            <li><i class="product-icons product-icons-printer"></i><span>Распечатать</span></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="product_info">
-                    <ul class="product_info_list">
-
-                        <li><span>Расположение</span><span><?php echo $product->tv['mestopolojenie']; ?></span></li>
-                        <li><span>Стоимость</span><span><?php echo $product->tv['stoimost'] . " " .$product->tv['razm_stoimosti']; ?></span></li>
-                        <li><span>Окупаемость</span><span><?php echo $product->tv['okypaemost']; ?></span></li>
-                        <li><span>Доход в месяц</span><span></span></li>
-                    </ul>
-                </div>
-            </div>
-
-        <?php
+            $prd.=",".$product['id'];
+            $i++;
         }
+        $res['count']=0;
+        if($prd!='') $prd=substr($prd, 1);
+        $res['res']=$prd;
+        $res['sql']=$sql;
+        echo json_encode($res);
 
     }
 

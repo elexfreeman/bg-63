@@ -1,3 +1,11 @@
+<div id="emptyProduct">
+    <div class="product_item">
+        <div class="product-border">
+            <img class="preloader" src="loader.GIF">
+        </div>
+    </div>
+</div>
+
 <div class="filter_nav_wrap">
     <div class="filter_nav">
         <div class="active_nav">Продажа (1231)</div>

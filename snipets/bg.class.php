@@ -22,8 +22,15 @@ class BG
     {
         global $modx;
         global $table_prefix;
-        /*
-         *
+
+
+/*
+select * from bg63_site_content
+where id in(
+
+select stoimost_content from
+(
+
 -- ----------------------------------
 
 select * from
@@ -60,8 +67,149 @@ select
 on a.okypaemost_content=b.stoimost_content
 -- ----------------------------------
 
-         *
+) res
+where res.stoimost>330000
+)
+
          * */
+
+        $sql="
+-- ----------------------------------
+
+select * from
+-- 			okypaemost -------------
+(
+select
+    tv.name okypaemost_title,
+    cv.value okypaemost,
+    cv.contentid okypaemost_content
+
+    from bg63_site_tmplvar_contentvalues cv
+
+    join bg63_site_tmplvars tv
+    on tv.id=cv.tmplvarid
+
+    where tv.name='okypaemost'
+) a
+-- ----------------------------------
+join
+(
+-- 			stoimost -------------
+select
+    tv.name stoimost_title,
+    cv.value stoimost,
+    cv.contentid stoimost_content
+
+    from bg63_site_tmplvar_contentvalues cv
+
+    join bg63_site_tmplvars tv
+    on tv.id=cv.tmplvarid
+
+    where tv.name='stoimost'
+) b
+on a.okypaemost_content=b.stoimost_content
+-- ----------------------------------
+";
+
+        $sql="select * from bg63_site_content
+where id in(
+
+select stoimost_content from
+(
+
+-- ----------------------------------
+
+select * from
+-- 			okypaemost -------------
+(
+select
+    tv.name okypaemost_title,
+    cv.value okypaemost,
+    cv.contentid okypaemost_content
+
+    from bg63_site_tmplvar_contentvalues cv
+
+    join bg63_site_tmplvars tv
+    on tv.id=cv.tmplvarid
+
+    where tv.name='okypaemost'
+) a
+-- ----------------------------------
+join
+(
+-- 			stoimost -------------
+select
+    tv.name stoimost_title,
+    cv.value stoimost,
+    cv.contentid stoimost_content
+
+    from bg63_site_tmplvar_contentvalues cv
+
+    join bg63_site_tmplvars tv
+    on tv.id=cv.tmplvarid
+
+    where tv.name='stoimost'
+) b
+on a.okypaemost_content=b.stoimost_content
+-- ----------------------------------
+
+) res
+where res.stoimost>330000
+)";
+
+        echo $sql;
+
+        foreach ($modx->query($sql) as $product)
+        {
+            $product=$this->GetProductInfo($product['id']);
+            ?>
+
+
+            <div class="product_item">
+                <div class="product_title">
+                    <?php echo $product->title; ?>
+                    <span>id <?php echo $product->id; ?></span>
+                </div>
+                <div class="product_img">
+                    <div class="product_img_list">
+                        <div class="product_img_list_layer"></div>
+                        <div class="prevSlider">
+                            <div class="item"></div>
+                            <div class="item"><img src="<?php echo "/UpLoad/" . $product->id . "/0.jpg"; ?>" alt=""></div>
+                            <div class="item"></div>
+                        </div>
+                    </div>
+
+                    <div class="product_buy_info" style="display:none">
+                        <i class="product-icons product-icons-flag"></i> Срочная продажа
+                    </div>
+
+                    <div class="product_buy_buttons">
+                        <ul class="product_buy_buttons_list" id="product_id_<?php echo $product->id; ?>">
+                            <li onclick="ProductDescription(<?php echo $product->url; ?>);">
+                                <i class="product-icons product-icons-list"></i><span>Подробнее</span>
+                            </li>
+                            <li onclick="AddToCard(<?php echo $product->id; ?>);"><i class="product-icons product-icons-bag"></i><span>В портфель</span></li>
+                            <li><i class="product-icons product-icons-money"></i><span>Поторговаться</span></li>
+                            <li><i class="product-icons product-icons-printer"></i><span>Распечатать</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="product_info">
+                    <ul class="product_info_list">
+
+                        <li><span>Расположение</span><span><?php echo $product->tv['mestopolojenie']; ?></span></li>
+                        <li><span>Стоимость</span><span><?php echo $product->tv['stoimost'] . " " .$product->tv['razm_stoimosti']; ?></span></li>
+                        <li><span>Окупаемость</span><span><?php echo $product->tv['okypaemost']; ?></span></li>
+                        <li><span>Доход в месяц</span><span></span></li>
+                    </ul>
+                </div>
+            </div>
+
+        <?php
+        }
+
     }
 
     function GetContentTV($content_id)
@@ -295,7 +443,7 @@ join  bg63_site_tmplvar_contentvalues cv
             $product->introtext = $row['introtext'];
             $product->description = $row['description'];
             $product->title = $row['pagetitle'];
-            $url = $row['uri'];
+            $product->url = $row['uri'];
             //теперь дополнительные поля
             // - 1 - если это подарки, то тут нету дополнительных цен
             $tv = $this->GetContentTV($product_id);

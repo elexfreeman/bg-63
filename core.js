@@ -47,19 +47,15 @@ function Search()
         {
             //log1:1,
             action:"Search",
-            sphere:sphere,
-            sphere:sphere,
-            sphere:sphere
+            dohodnost:dohodnost,
+            vlj_min:vlj_min,
+            vlj_max:vlj_max,
+            srok:srok
         },
-        function (data) {
-            console.info(data);
-            if(data.status=="1")
-            {
-
-                $(".ProductCountText").html(data.panel_text);
-            }
-
-        },"json"
+        function (data)
+        {
+                $(".product_list").html(data);
+        },"html"
     ); //$.get  END
 
 

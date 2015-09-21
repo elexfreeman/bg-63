@@ -111,6 +111,11 @@ on a.okypaemost_content=b.stoimost_content
 -- ----------------------------------
 ";
 
+        $dohodnost=mysql_escape_string($_GET['dohodnost']);
+        $vlj_min=mysql_escape_string($_GET['vlj_min']);
+        $vlj_max=mysql_escape_string($_GET['vlj_max']);
+        $srok=mysql_escape_string($_GET['srok']);
+
         $sql="select * from ".$table_prefix."site_content
 where id in(
 
@@ -157,7 +162,7 @@ on a.okypaemost_content=b.stoimost_content
 where res.stoimost>330000
 
 
-) limit 100";
+)";
 
        // echo $sql;
 
@@ -169,7 +174,7 @@ where res.stoimost>330000
             $prd.=",".$product['id'];
             $i++;
         }
-        $res['count']=0;
+        $res['count']=$i;
         if($prd!='') $prd=substr($prd, 1);
         $res['res']=$prd;
         $res['sql']=$sql;

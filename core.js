@@ -69,8 +69,16 @@ function Search()
                 $(".product_list").html("");
 
 
+            //Запихиваем найденные значения для последующего использования
+            $("#emptyProduct").attr('startProduct','30');
+            $("#emptyProduct").attr('arr',data.res);
+            $("#emptyProduct").attr('count',count);
+            PrintProducts(0,arr,count);
 
-           // console.info(arr);
+
+
+
+            // console.info(arr);
             /*Получить кол-во найденных объектов*/
 
             /*Получить йих ID*/
@@ -78,23 +86,6 @@ function Search()
             /*Вывести первые 10 шт*/
 
 
-            var tmp=0;
-            /*Перебираем полученные данные*/
-           arr.forEach(function(item, i, arr) {
-                console.info( i + ": " + item );
-
-               if (tmp==0)
-               {
-                   AppendProduct2(item);
-               }
-               else
-               {
-                   tt=setTimeout(function() {AppendProduct2(item); }, 1000)
-               }
-
-
-
-           });
 
                // $(".product_list").html(data);
         },"json"
@@ -102,6 +93,49 @@ function Search()
 
 
 }
+
+//Выводит 30 продуктов
+function PrintProducts(product_start,arr,count)
+{
+    var tmp=0;
+    var kk=0;
+    count=parseInt(count);
+    $("#emptyProduct").attr('startProduct',(parseInt(product_start)+30));
+    for (var i = product_start; i < (parseInt(product_start)+30); i++)
+    {
+        if(count<i)
+        {
+            break;
+        }
+        else
+        {
+            AppendProduct2(arr[i]);
+        }
+    }
+    console.info(count,i);
+    if(count>=i)
+    {
+        $('.product_list_all').remove();
+        $(".product_list").append('<div class="product_list_all" onclick="PrintProductNext()"><i class="product-icons product-icons-all"></i> Показать еще</div>');
+    }
+
+}
+
+//Для вывода следующих 30 элементов при поиске
+function PrintProductNext()
+{
+
+    //получаем все эелменты
+    var startProduct = parseInt($("#emptyProduct").attr('startProduct'));
+    var arr = $("#emptyProduct").attr('arr');
+    arr=arr.split(',');
+
+    var count = parseInt($("#emptyProduct").attr('count'));
+
+
+    PrintProducts(startProduct,arr,count);
+}
+
 
 //Добавдяет продукт в конец
 
@@ -129,7 +163,7 @@ function AppendProduct(arr_id,count,arr)
             console.info(parseInt(arr_id),parseInt(count));
             if(parseInt(arr_id)<=parseInt(count))
               //  AppendProduct(arr_id+1,count,arr);
-                setTimeout(function() { AppendProduct(parseInt(arr_id)+1,count,arr) }, 500)
+                setTimeout(function() { AppendProduct(parseInt(arr_id)+1,count,arr) }, 1000)
 
         }
         ,"html"

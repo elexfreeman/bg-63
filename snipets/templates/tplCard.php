@@ -53,9 +53,9 @@ if($cc>0)
                                 $product_id=$kk[1];
                                 $product=$this->GetProductInfo($product_id);
 
-                                echo "<pre>";
+                               /* echo "<pre>";
                                 print_r($product);
-                                echo "</pre>";
+                                echo "</pre>";*/
                                 ?>
                 <div class="cart_product_row">
                                 <div>

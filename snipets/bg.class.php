@@ -44,7 +44,7 @@ select
 -- ----------------------------------
 join
 (
--- 			okypaemost -------------
+-- 			stoimost -------------
 select
     tv.name stoimost_title,
     cv.value stoimost,

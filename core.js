@@ -20,3 +20,8 @@ function AddToCard(product_id)
         },"json"
     ); //$.get  END
 }
+
+function Search()
+{
+
+}

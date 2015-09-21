@@ -41,6 +41,8 @@ function Search()
     var srok = $(".input_slider_line_3").val();
 
     console.info(sphere,dohodnost,vlj_min,vlj_max,srok);
+    $(".product_list").html($("#emptyProduct").html());
+
 
     $.get(
         "ajax.html",
@@ -54,8 +56,14 @@ function Search()
         },
         function (data)
         {
-                $(".product_list").html(data);
-        },"html"
+            /*Получить кол-во найденных объектов*/
+
+            /*Получить йих ID*/
+
+            /*Вывести первые 10 шт*/
+
+               // $(".product_list").html(data);
+        },"json"
     ); //$.get  END
 
 

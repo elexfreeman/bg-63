@@ -1816,7 +1816,26 @@ where cv.contentid=".$row['id'];
 
     function SphereList()
     {
+        global $modx;
+        global $table_prefix;
+        $sql_sphere="select  distinct
+            tv.name,
+            cv.value
 
+            from bg63_site_tmplvar_contentvalues cv
+
+            join bg63_site_tmplvars tv
+            on tv.id=cv.tmplvarid
+
+            where tv.name='vid_name'
+            ;";
+
+        $temp=array();
+        foreach ($modx->query($sql_sphere) as $row_sphere)
+        {
+            $tmp[]=$row_sphere['value'];
+        }
+        return $tmp;
     }
 
 }

@@ -90,13 +90,27 @@
                     <p class="title">Какие направления Вас интересуют?</p>
 
                     <ul class="trend_list">
-                        <li>Магазины непродовольственных товаров</li>
-                        <li>Строительство</li>
-                        <li>Магазины продовольственных товаров</li>
-                        <li>Павильоны, киоски</li>
-                        <li>Сельское хозяйство</li>
-                        <li>Гостиницы, турбазы, отели</li>
-                        <li>Еще 20 направлений</li>
+
+                        <?php
+                        $spheres=$this->SphereList();
+                        $kk=0;
+                        foreach($spheres as $sphere)
+                        {
+                            if($kk<6)
+                            {
+                                echo "<li class='sphere'>".$sphere."</li>";
+                            }
+                            else
+                            {
+                                echo "<li class='sphere' style='display:none'>".$sphere."</li>";
+                            }
+
+                            $kk++;
+                        }
+                        ?>
+
+
+                        <li class="sphereAll" onclick="$('.sphere').fadeIn('slow');$('.sphereAll').fadeOut('slow');">Остальные направления</li>
                     </ul>
                 </div>
 
@@ -254,9 +268,13 @@
                 $('.input_slider_line_4').attr('value', val_2);
             },
             slide: function (event, ui_2) {
-                $('.slider_line_2 .ui-slider-handle').attr('data-hint', ui_2.values);
-                $('.input_slider_line_2').attr('value', ui_2.values);
-                $('.input_slider_line_4').attr('value', ui_2.values);
+                //$('.slider_line_2 .ui-slider-handle').attr('data-hint', ui_2.values);
+                //$('.input_slider_line_2').attr('value', ui_2.values);
+                //$('.input_slider_line_4').attr('value', ui_2.values);siblings()
+                $('.slider_line_2').find(".ui-slider-handle:first").attr('data-hint',  $( ".slider_line_2" ).slider( "values", 0 ));
+                $('.slider_line_2').find(".ui-slider-handle:last").attr('data-hint',  $( ".slider_line_2" ).slider( "values", 1 ));
+                $('.input_slider_line_2').attr('value', $( ".slider_line_2" ).slider( "values", 0 ));
+                $('.input_slider_line_4').attr('value',  $( ".slider_line_2" ).slider( "values", 1 ));
             },
         });
         $('.slider_line_3').slider({
@@ -267,6 +285,8 @@
             range: 'min',
             create: function (event, ui_3) {
                 val_3 = $('.slider_line_3').slider('value');
+
+
                 $('.slider_line_3 .ui-slider-handle').attr('data-hint', val_3);
                 $('.input_slider_line_3').attr('value', val_3);
             },

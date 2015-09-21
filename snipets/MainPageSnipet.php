@@ -16,6 +16,8 @@ if (isset($_GET['action'])) {
         $BG->AddToCard(mysql_escape_string($_GET['product_id']));
     } elseif ($_GET['action'] == 'Search') {
         $BG->Search();
+    } elseif ($_GET['action'] == 'GetProductSingle') {
+        $BG->GetProductSingle(mysql_escape_string($_GET['product_id']));
     }
 
 }

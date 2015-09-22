@@ -11,61 +11,58 @@ class BG
 {
 
 
-    function rus2translit($string) {
-        $converter = array(
-            'а' => 'a',   'б' => 'b',   'в' => 'v',
-            'г' => 'g',   'д' => 'd',   'е' => 'e',
-            'ё' => 'e',   'ж' => 'zh',  'з' => 'z',
-            'и' => 'i',   'й' => 'y',   'к' => 'k',
-            'л' => 'l',   'м' => 'm',   'н' => 'n',
-            'о' => 'o',   'п' => 'p',   'р' => 'r',
-            'с' => 'c',   'т' => 't',   'у' => 'u',
-            'ф' => 'f',   'х' => 'h',   'ц' => 'c',
-            'ч' => 'ch',  'ш' => 'sh',  'щ' => 'sch',
-            'ь' => '\'',  'ы' => 'y',   'ъ' => '\'',
-            'э' => 'e',   'ю' => 'yu',  'я' => 'ya',
+  function rus2translit($string)
+  {
+    $converter = array(
+      'а' => 'a', 'б' => 'b', 'в' => 'v',
+      'г' => 'g', 'д' => 'd', 'е' => 'e',
+      'ё' => 'e', 'ж' => 'zh', 'з' => 'z',
+      'и' => 'i', 'й' => 'y', 'к' => 'k',
+      'л' => 'l', 'м' => 'm', 'н' => 'n',
+      'о' => 'o', 'п' => 'p', 'р' => 'r',
+      'с' => 'c', 'т' => 't', 'у' => 'u',
+      'ф' => 'f', 'х' => 'h', 'ц' => 'c',
+      'ч' => 'ch', 'ш' => 'sh', 'щ' => 'sch',
+      'ь' => '\'', 'ы' => 'y', 'ъ' => '\'',
+      'э' => 'e', 'ю' => 'yu', 'я' => 'ya',
 
-            'А' => 'A',   'Б' => 'B',   'В' => 'V',
-            'Г' => 'G',   'Д' => 'D',   'Е' => 'E',
-            'Ё' => 'E',   'Ж' => 'Zh',  'З' => 'Z',
-            'И' => 'I',   'Й' => 'Y',   'К' => 'K',
-            'Л' => 'L',   'М' => 'M',   'Н' => 'N',
-            'О' => 'O',   'П' => 'P',   'Р' => 'R',
-            'С' => 'C',   'Т' => 'T',   'У' => 'U',
-            'Ф' => 'F',   'Х' => 'H',   'Ц' => 'C',
-            'Ч' => 'Ch',  'Ш' => 'Sh',  'Щ' => 'Sch',
-            'Ь' => '_',  'Ы' => 'Y',   'Ъ' => '_',
-            'Э' => 'E',   'Ю' => 'Yu',  'Я' => 'Ya',
-        );
-        return strtr($string, $converter);
-    }
+      'А' => 'A', 'Б' => 'B', 'В' => 'V',
+      'Г' => 'G', 'Д' => 'D', 'Е' => 'E',
+      'Ё' => 'E', 'Ж' => 'Zh', 'З' => 'Z',
+      'И' => 'I', 'Й' => 'Y', 'К' => 'K',
+      'Л' => 'L', 'М' => 'M', 'Н' => 'N',
+      'О' => 'O', 'П' => 'P', 'Р' => 'R',
+      'С' => 'C', 'Т' => 'T', 'У' => 'U',
+      'Ф' => 'F', 'Х' => 'H', 'Ц' => 'C',
+      'Ч' => 'Ch', 'Ш' => 'Sh', 'Щ' => 'Sch',
+      'Ь' => '_', 'Ы' => 'Y', 'Ъ' => '_',
+      'Э' => 'E', 'Ю' => 'Yu', 'Я' => 'Ya',
+    );
+    return strtr($string, $converter);
+  }
 
-    function encodestring($str) {
-        // переводим в транслит
-        $str = rus2translit($str);
-        // в нижний регистр
-        $str = strtolower($str);
-        // заменям все ненужное нам на "-"
-        $str = preg_replace('~[^-a-z0-9_]+~u', '-', $str);
-        // удаляем начальные и конечные '-'
-        $str = trim($str, "-");
+  function encodestring($str)
+  {
+    // переводим в транслит
+    $str = rus2translit($str);
+    // в нижний регистр
+    $str = strtolower($str);
+    // заменям все ненужное нам на "-"
+    $str = preg_replace('~[^-a-z0-9_]+~u', '-', $str);
+    // удаляем начальные и конечные '-'
+    $str = trim($str, "-");
 
 
-        return $str;
-    }
+    return $str;
+  }
 
-    function FilterForm()
-    {
-        global $modx;
-        global $table_prefix;
-        include "templates/tplFiltrForm.php";
-    }
   function FilterForm()
   {
     global $modx;
     global $table_prefix;
     include "templates/tplFiltrForm.php";
   }
+
 
   function Search()
   {
@@ -98,7 +95,6 @@ class BG
     return $tv;
   }
 
-
   // объявление метода
   public function MainPage()
   {
@@ -107,29 +103,27 @@ class BG
     $parent = $_GET['parent'];
     $start = $_GET['start'] + 0;
     $count = $_GET['count'] + 0;
+    $sqlTV = "SELECT elements FROM bg63_site_tmplvars WHERE id=58";
+    foreach ($modx->query($sqlTV) as $xx) {
+      $elem = $xx['elements'];
+    }
+    $elem = explode("||", $elem);
+    foreach ($elem as $dd) {
+
+    }
+
+
     $sql = 'select
-
-(select count(*) n from bg63_site_content cc1
-join  bg63_site_tmplvar_contentvalues cv
-                        on cv.contentid=cc1.id
-
-                        JOIN bg63_site_tmplvars tv ON tv.id=cv.tmplvarid
-
-
-
-                        where (cc1.template=2)and(tv.name="prodano") ) nn,
-
-                         content.*
-                        from bg63_site_content content
-                        join  bg63_site_tmplvar_contentvalues cv
-                        on cv.contentid=content.id
-
-                        JOIN bg63_site_tmplvars tv ON tv.id=cv.tmplvarid
-
-
-
-                        where (content.template=2)and(tv.name="prodano")
-
+    (select count(*) n from bg63_site_content cc1
+    join  bg63_site_tmplvar_contentvalues cv
+    on cv.contentid=cc1.id
+    JOIN bg63_site_tmplvars tv
+    ON tv.id=cv.tmplvarid
+    where (cc1.template=2)and(cv.value LIKE "' . $parent . '")) nn, content.* from bg63_site_content content
+    join  bg63_site_tmplvar_contentvalues cv
+    on cv.contentid=content.id
+    JOIN bg63_site_tmplvars tv ON tv.id=cv.tmplvarid
+    where (content.template=2)and(cv.value like "' . $parent . '")
                         limit ' . $start . ', ' . $count . '
         ';
 
@@ -399,6 +393,17 @@ join  bg63_site_tmplvar_contentvalues cv
     </div>
   <?php
   }
+
+
+    //Получить продукт по его втутреннему номеру (отдельное TV)
+    function GetProductByInnerID($Inner_ID)
+    {
+        global $modx;
+        global $table_prefix;
+
+
+
+    }
 
 }
 

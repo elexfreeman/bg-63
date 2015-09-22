@@ -52,7 +52,9 @@ function Search()
             dohodnost:dohodnost,
             vlj_min:vlj_min,
             vlj_max:vlj_max,
-            srok:srok
+            srok:srok,
+            sphere:sphere
+
         },
         function (data)
         {

@@ -13,7 +13,7 @@
 /**
  * @param $string
  * @return string
- *
+ * 
  */
 
 function rus2translit($string) {
@@ -793,28 +793,64 @@ where cv.contentid=".$row['id'];
 
     }
 
-    function ProductUdate()
+    function ProductUpdate()
     {
         global $modx;
-  /*      echo "<pre>";
-        print_r($_POST);
-        echo "</pre>";
-*/
-        $product_id=$_POST['product_id'];
 
-        foreach ($_POST as $key=>$value)
-        {
-            $sql="update bg63_site_tmplvar_contentvalues set
-`value`='".$value."'
-where (contentid=30)and(tmplvarid=
+        $productId = $_POST['product_id'];
 
-(
-select id from bg63_site_tmplvars where name='".$key."'
+        foreach ($_POST as $key => $value) {
 
-));" ;
+            if ($key == "action" || $key == "product_id" || $key == "name"){continue;}
 
-            $modx->query($sql);
-            echo $sql."<br>";
+            if (is_array($value)) {
+
+                $insertVal = implode("||", $value);
+
+            }
+            else {
+
+                $insertVal = $value;
+
+            }
+
+            if ($key == "areatype_input" && !empty($value)) {
+
+                $aretypeValueQuery = $modx->query("SELECT `elements` FROM bg63_site_tmplvars WHERE `name` = 'areatype'");
+                $aretypeValue = $aretypeValueQuery->fetchColumn() . " || " . $value;
+                $modx->query("UPDATE bg63_site_tmplvars SET `elements` = '{$aretypeValue}' WHERE `name` = 'areatype'");
+
+            }
+
+            $checkQuery = $modx->query("SELECT id FROM bg63_site_tmplvar_contentvalues WHERE tmplvarid=(SELECT id FROM bg63_site_tmplvars where name='{$key}') AND contentid = {$productId} LIMIT 1");
+            if($checkQuery->rowCount() > 0) {
+
+                $fieldId = $checkQuery->fetchColumn();
+                $updateQuery = "UPDATE bg63_site_tmplvar_contentvalues SET value = '{$insertVal}' WHERE id = {$fieldId}";
+                $modx->query($updateQuery);
+
+                echo $updateQuery."<br>";
+
+            }
+            else {
+
+                $tvIdQuery = $modx->query("(SELECT id FROM bg63_site_tmplvars where name='{$key}')");
+                $tvId = $tvIdQuery->fetchColumn();
+                if ($tvId != "") {
+                    $insertQuery = "INSERT INTO bg63_site_tmplvar_contentvalues (tmplvarid, contentid, value)
+                                    VALUES ({$tvId}, {$productId}, '{$insertVal}')";
+                    $modx->query($insertQuery);
+
+                    echo $insertQuery."<br>";
+
+                }
+                else {
+
+                    echo "tv not found:{$key}<br/>";
+
+                }
+            }
+
 
         }
 

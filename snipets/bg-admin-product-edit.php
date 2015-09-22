@@ -13,7 +13,7 @@ $list=new BGAdmin();
 
 if((isset($_POST['action']))and($_POST['action']=='update'))
 {
-    $list->ProductUdate();
+    $list->ProductUpdate();
 }
 else
 $list->ProductEdit();

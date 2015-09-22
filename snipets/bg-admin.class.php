@@ -1225,7 +1225,8 @@ where cv.contentid=" . $row['id'];
                                           id="field-9"
                                           type="text"
                                           placeholder="Example Text"
-                                          name="field-9">
+                                          value="<?=$tv['photo1']?>"
+                                          name="photo1">
                             </div>
                             <div class="w-col w-col-6">
                                 <label for="field-10">Фото 2:</label>
@@ -1233,7 +1234,8 @@ where cv.contentid=" . $row['id'];
                                                        id="field-10"
                                                        type="text"
                                                        placeholder="Example Text"
-                                                       name="field-10"
+                                                       value="<?=$tv['photo2']?>"
+                                                       name="photo2"
 
                                                        data-name="Field 10">
                             </div>
@@ -1245,7 +1247,8 @@ where cv.contentid=" . $row['id'];
                                                        id="field-11"
                                                        type="text"
                                                        placeholder="Example Text"
-                                                       name="field-11"
+                                                       value="<?=$tv['photo3']?>"
+                                                       name="photo3"
 
                                                        data-name="Field 11">
                             </div>
@@ -1255,7 +1258,8 @@ where cv.contentid=" . $row['id'];
                                                        id="field-12"
                                                        type="text"
                                                        placeholder="Example Text"
-                                                       name="field-12"
+                                                       value="<?=$tv['photo4']?>"
+                                                       name="photo4"
 
                                                        data-name="Field 12">
                             </div>

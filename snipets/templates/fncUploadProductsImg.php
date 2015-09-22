@@ -37,22 +37,25 @@ foreach ($modx->query($sql) as $row)
 
       $fileNameQuery = $modx->query("SELECT contentid FROM bg63_site_tmplvar_contentvalues WHERE `value` = '{$inner_id}' AND `tmplvarid`=48");
 
-      $contentId = $fileNameQuery->fetchColumn();
 
-      echo "INSERT INTO bg63_site_tmplvar_contentvalues (tmplvarid, contentid, vlaue) VALUES (48, {$contentId}, '{$file}')";
 
-      //$modx->query("INSERT INTO bg63_site_tmplvar_contentvalues (tmplvarid, contentid, vlaue) VALUES (48, {$contentId}, '{$fileName}')");
+      if ($fileNameQuery->rowCount() > 0) {
 
+        $contentId = $fileNameQuery->fetchColumn();
+        $imgArr[] = $contentId;
+        $arrCount = array_count_values($imgArr);
+        switch($arrCount[$contentId]){
+          case "1": $photo = 34;break;
+          case "2": $photo = 35;break;
+          case "3": $photo = 36;break;
+          case "4": $photo = 37;break;
+          case "5": $photo = 38;break;
+        }
+        echo "INSERT INTO bg63_site_tmplvar_contentvalues (tmplvarid, contentid, `value`) VALUES ({$photo}, {$contentId}, '{$file}')";
+
+        $modx->query("INSERT INTO bg63_site_tmplvar_contentvalues (tmplvarid, contentid, `value`) VALUES ({$photo}, {$contentId}, '{$file}')");
+      }
     }
   }
   closedir($handle);
 }
-exit;
-
-
-
-
-
-  var_dump($product);exit;
-
-//}

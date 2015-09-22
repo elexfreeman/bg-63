@@ -70,8 +70,8 @@
 
                         <div class="slider_line_wrap">
                             <span>1000 000</span> <span class="slider_line_2"></span> <span>10 000 000</span>
-                            <input class="input_slider_line_2" value="" hidden>
-                            <input class="input_slider_line_4" value="" hidden>
+                            <input class="input_slider_line_2" value="1000000" hidden>
+                            <input class="input_slider_line_4" value="10000000" hidden>
                         </div>
                     </div>
 
@@ -317,16 +317,18 @@
             },
         });
         $('.slider_line_2').slider({
-            min: 1000000,
+            min: 100000,
             max: 10000000,
             values: [1000000, 8000000],
             step: 500000,
             range: true,
             create: function (event, ui_2) {
                 val_2 = $('.slider_line_2').slider('value');
-                $('.slider_line_2 .ui-slider-handle').attr('data-hint', val_2);
-                $('.input_slider_line_2').attr('value', val_2);
-                $('.input_slider_line_4').attr('value', val_2);
+                //$('.slider_line_2 .ui-slider-handle').attr('data-hint', val_2);
+                $('.slider_line_2').find(".ui-slider-handle:first").attr('data-hint',   100000 );
+                $('.slider_line_2').find(".ui-slider-handle:last").attr('data-hint',  10000000 );
+                $('.input_slider_line_2').attr('value', 100000);
+                $('.input_slider_line_4').attr('value', 10000000);
             },
             slide: function (event, ui_2) {
                 //$('.slider_line_2 .ui-slider-handle').attr('data-hint', ui_2.values);

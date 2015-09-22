@@ -61,6 +61,7 @@ function Search()
             arr=arr.split(',');
             var count=parseInt(data.count);
             var i=0;
+            console.info(data.sql);
 
 
             //if(count>0)

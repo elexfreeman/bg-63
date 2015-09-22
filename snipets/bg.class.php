@@ -421,8 +421,13 @@ having  inner_id='".$Inner_ID."'";
         foreach ($modx->query($sql) as $row_tv) {
            $product_id=$row_tv['id'];
         }
-
         return $product_id;
+    }
+
+
+    //Пописывает в поля картинки из папки
+    function UploadProductsImg()
+    {
 
     }
 

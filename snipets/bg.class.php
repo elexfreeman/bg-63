@@ -286,9 +286,11 @@ join  bg63_site_tmplvar_contentvalues cv
               <li onclick1="ProductDescription('<?php echo $product['uri']; ?>');">
                 <a href="<?php echo $product['uri']; ?>"><i class="product-icons product-icons-list"></i><span>Подробнее</span></a>
               </li>
-              <li onclick="AddToCard(<?php echo $product['id']; ?>);"><i class="product-icons product-icons-bag"></i><span>В портфель</span></li>
-              <li><i class="product-icons product-icons-money"></i><span>Поторговаться</span></li>
-              <li><i class="product-icons product-icons-printer"></i><span>Распечатать</span></li>
+              <li class="add_to_portfel" onclick="AddToCard(<?php echo $product['id']; ?>); jQuery('#mess_portfel').arcticmodal(); setTimeout(function () {
+			$('#mess_portfel').arcticmodal('close');
+			}, 1000);"><i class="product-icons product-icons-bag"></i><span>В портфель</span></li>
+              <li onclick="jQuery('#mess_potorg').arcticmodal();"><i class="product-icons product-icons-money"></i><span>Поторговаться</span></li>
+              <li><a href="<?php echo $product['uri']; ?>#print"><i class="product-icons product-icons-printer"></i><span>Распечатать</span></a></li>
             </ul>
           </div>
         </div>
@@ -380,19 +382,6 @@ join  bg63_site_tmplvar_contentvalues cv
     }
 
 
-    function LeftMenu()
-    {
-        global $modx;
-        global $table_prefix;
-
-        $menu=$this->SphereList();
-        foreach($menu as $sp);
-        {
-            echo $sp."<br>";
-        }
-
-    }
-
     function GlobalSnipet($scriptProperties)
     {
         global $modx;
@@ -453,13 +442,18 @@ join  bg63_site_tmplvar_contentvalues cv
             where tv.name='vid_name'
             ;";
 
-        echo $sql_sphere;
         $temp=array();
         foreach ($modx->query($sql_sphere) as $row_sphere)
         {
             $tmp[]=$row_sphere['value'];
         }
         return $tmp;
+    }
+
+    /*Сделать страницы со сферами бизнса*/
+    function GetSphereList()
+    {
+        //$dd=$this
     }
 
 

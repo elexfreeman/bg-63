@@ -6,9 +6,15 @@
  * Time: 11:34
  */
 
-
+/*sd*/
 /*05KtXxixXb*/
-
+/*sdsdsdsds*/
+/*asasasas*/
+/**
+ * @param $string
+ * @return string
+ * 
+ */
 
 function rus2translit($string) {
     $converter = array(
@@ -270,7 +276,7 @@ on a.id=d.id";
         global $modx;
         ?>
         <div class="w-container body-container">
-            <h1 class="main-container-h1">Список объектов на продажу</h1>
+            <h1 class="main-container-h1">156555Список объектов на продажу1</h1>
 
             <div class="w-row row-filter">
 

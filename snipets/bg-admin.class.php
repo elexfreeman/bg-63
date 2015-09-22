@@ -268,7 +268,7 @@ on a.id=d.id";
         global $modx;
         ?>
         <div class="w-container body-container">
-            <h1 class="main-container-h1">Список объектов на продажу</h1>
+            <h1 class="main-container-h1">1Список объектов на продажу1</h1>
 
             <div class="w-row row-filter">
 

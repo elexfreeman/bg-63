@@ -401,7 +401,28 @@ class BG
         global $modx;
         global $table_prefix;
 
+        $product_id=0;
 
+        $sql="select
+    tv.name inner_id_title,
+    cv.value inner_id,
+    cv.contentid inner_id_content
+
+    from ".$table_prefix."site_tmplvar_contentvalues cv
+
+    join ".$table_prefix."site_tmplvars tv
+    on tv.id=cv.tmplvarid
+
+    where tv.name='inner_id'
+
+having  inner_id='".$Inner_ID."'";
+
+        // echo $sql_tv;
+        foreach ($modx->query($sql) as $row_tv) {
+           $product_id=$row_tv['id'];
+        }
+
+        return $product_id;
 
     }
 

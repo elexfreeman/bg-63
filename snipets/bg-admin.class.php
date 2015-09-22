@@ -7,6 +7,8 @@
  */
 
 
+/*05KtXxixXb*/
+
 
 function rus2translit($string) {
     $converter = array(

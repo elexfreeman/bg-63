@@ -159,7 +159,7 @@ on a.okypaemost_content=b.stoimost_content
 -- ----------------------------------
 
 ) res
-where res.stoimost>330000
+where (res.stoimost>330000)and(res.stoimost<330000)
 
 
 )";
@@ -283,8 +283,8 @@ join  bg63_site_tmplvar_contentvalues cv
 
           <div class="product_buy_buttons">
             <ul class="product_buy_buttons_list" id="product_id_<?php echo $product['id']; ?>">
-              <li onclick="ProductDescription(<?php echo $product['uri']; ?>);">
-                <i class="product-icons product-icons-list"></i><span>Подробнее</span>
+              <li onclick1="ProductDescription('<?php echo $product['uri']; ?>');">
+                <a href="<?php echo $product['uri']; ?>"><i class="product-icons product-icons-list"></i><span>Подробнее</span></a>
               </li>
               <li onclick="AddToCard(<?php echo $product['id']; ?>);"><i class="product-icons product-icons-bag"></i><span>В портфель</span></li>
               <li><i class="product-icons product-icons-money"></i><span>Поторговаться</span></li>
@@ -380,6 +380,19 @@ join  bg63_site_tmplvar_contentvalues cv
     }
 
 
+    function LeftMenu()
+    {
+        global $modx;
+        global $table_prefix;
+
+        $menu=$this->SphereList();
+        foreach($menu as $sp);
+        {
+            echo $sp."<br>";
+        }
+
+    }
+
     function GlobalSnipet($scriptProperties)
     {
         global $modx;
@@ -440,6 +453,7 @@ join  bg63_site_tmplvar_contentvalues cv
             where tv.name='vid_name'
             ;";
 
+        echo $sql_sphere;
         $temp=array();
         foreach ($modx->query($sql_sphere) as $row_sphere)
         {

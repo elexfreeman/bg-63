@@ -11,6 +11,8 @@ class BG
 {
 
 
+    public $catalog_id=2;
+
   function rus2translit($string)
   {
     $converter = array(
@@ -96,6 +98,9 @@ class BG
   }
 
   // объявление метода
+  /**
+   * фунция вывода в каталог товаров по их категориям
+   */
   public function MainPage()
   {
 
@@ -119,11 +124,11 @@ class BG
     on cv.contentid=cc1.id
     JOIN bg63_site_tmplvars tv
     ON tv.id=cv.tmplvarid
-    where (cc1.template=2)and(cv.value LIKE "' . $parent . '")) nn, content.* from bg63_site_content content
+    where (cc1.template=2)and(cv.value LIKE "%' . $parent . '%")) nn, content.* from bg63_site_content content
     join  bg63_site_tmplvar_contentvalues cv
     on cv.contentid=content.id
     JOIN bg63_site_tmplvars tv ON tv.id=cv.tmplvarid
-    where (content.template=2)and(cv.value like "' . $parent . '")
+    where (content.template=2)and(cv.value like "%' . $parent . '%")
                         limit ' . $start . ', ' . $count . '
         ';
 
@@ -428,7 +433,9 @@ having  inner_id='".$Inner_ID."'";
     //Пописывает в поля картинки из папки
     function UploadProductsImg()
     {
-
+        global $modx;
+        global $table_prefix;
+        include "templates/fncUploadProductsImg.php";
     }
 
 }

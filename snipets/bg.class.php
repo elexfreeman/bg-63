@@ -6,189 +6,80 @@
  * Date: 01.09.15
  * Time: 11:41
  */
-
 //Класс ждя работы с front-end
 class BG
 {
 
-    function FilterForm()
-    {
-        global $modx;
-        global $table_prefix;
-        include "templates/tplFiltrForm.php";
-    }
 
-    function Search()
-    {
-        global $modx;
-        global $table_prefix;
+    public $catalog_id=2;
 
+  function rus2translit($string)
+  {
+    $converter = array(
+      'а' => 'a', 'б' => 'b', 'в' => 'v',
+      'г' => 'g', 'д' => 'd', 'е' => 'e',
+      'ё' => 'e', 'ж' => 'zh', 'з' => 'z',
+      'и' => 'i', 'й' => 'y', 'к' => 'k',
+      'л' => 'l', 'м' => 'm', 'н' => 'n',
+      'о' => 'o', 'п' => 'p', 'р' => 'r',
+      'с' => 'c', 'т' => 't', 'у' => 'u',
+      'ф' => 'f', 'х' => 'h', 'ц' => 'c',
+      'ч' => 'ch', 'ш' => 'sh', 'щ' => 'sch',
+      'ь' => '\'', 'ы' => 'y', 'ъ' => '\'',
+      'э' => 'e', 'ю' => 'yu', 'я' => 'ya',
 
-/*
-select * from bg63_site_content
-where id in(
+      'А' => 'A', 'Б' => 'B', 'В' => 'V',
+      'Г' => 'G', 'Д' => 'D', 'Е' => 'E',
+      'Ё' => 'E', 'Ж' => 'Zh', 'З' => 'Z',
+      'И' => 'I', 'Й' => 'Y', 'К' => 'K',
+      'Л' => 'L', 'М' => 'M', 'Н' => 'N',
+      'О' => 'O', 'П' => 'P', 'Р' => 'R',
+      'С' => 'C', 'Т' => 'T', 'У' => 'U',
+      'Ф' => 'F', 'Х' => 'H', 'Ц' => 'C',
+      'Ч' => 'Ch', 'Ш' => 'Sh', 'Щ' => 'Sch',
+      'Ь' => '_', 'Ы' => 'Y', 'Ъ' => '_',
+      'Э' => 'E', 'Ю' => 'Yu', 'Я' => 'Ya',
+    );
+    return strtr($string, $converter);
+  }
 
-select stoimost_content from
-(
-
--- ----------------------------------
-
-select * from
--- 			okypaemost -------------
-(
-select
-    tv.name okypaemost_title,
-    cv.value okypaemost,
-    cv.contentid okypaemost_content
-
-    from bg63_site_tmplvar_contentvalues cv
-
-    join bg63_site_tmplvars tv
-    on tv.id=cv.tmplvarid
-
-    where tv.name='okypaemost'
-) a
--- ----------------------------------
-join
-(
--- 			stoimost -------------
-select
-    tv.name stoimost_title,
-    cv.value stoimost,
-    cv.contentid stoimost_content
-
-    from bg63_site_tmplvar_contentvalues cv
-
-    join bg63_site_tmplvars tv
-    on tv.id=cv.tmplvarid
-
-    where tv.name='stoimost'
-) b
-on a.okypaemost_content=b.stoimost_content
--- ----------------------------------
-
-) res
-where res.stoimost>330000
-)
-
-         * */
-
-        $sql="
--- ----------------------------------
-
-select * from
--- 			okypaemost -------------
-(
-select
-    tv.name okypaemost_title,
-    cv.value okypaemost,
-    cv.contentid okypaemost_content
-
-    from bg63_site_tmplvar_contentvalues cv
-
-    join bg63_site_tmplvars tv
-    on tv.id=cv.tmplvarid
-
-    where tv.name='okypaemost'
-) a
--- ----------------------------------
-join
-(
--- 			stoimost -------------
-select
-    tv.name stoimost_title,
-    cv.value stoimost,
-    cv.contentid stoimost_content
-
-    from bg63_site_tmplvar_contentvalues cv
-
-    join bg63_site_tmplvars tv
-    on tv.id=cv.tmplvarid
-
-    where tv.name='stoimost'
-) b
-on a.okypaemost_content=b.stoimost_content
--- ----------------------------------
-";
-
-        $dohodnost=mysql_escape_string($_GET['dohodnost']);
-        $vlj_min=mysql_escape_string($_GET['vlj_min']);
-        $vlj_max=mysql_escape_string($_GET['vlj_max']);
-        $srok=mysql_escape_string($_GET['srok']);
-
-        $sql="select * from ".$table_prefix."site_content
-where id in(
-
-select stoimost_content from
-(
-
--- ----------------------------------
-
-select * from
--- 			okypaemost -------------
-(
-select
-    tv.name okypaemost_title,
-    cv.value okypaemost,
-    cv.contentid okypaemost_content
-
-    from ".$table_prefix."site_tmplvar_contentvalues cv
-
-    join ".$table_prefix."site_tmplvars tv
-    on tv.id=cv.tmplvarid
-
-    where tv.name='okypaemost'
-) a
--- ----------------------------------
-join
-(
--- 			stoimost -------------
-select
-    tv.name stoimost_title,
-    cv.value stoimost,
-    cv.contentid stoimost_content
-
-    from ".$table_prefix."site_tmplvar_contentvalues cv
-
-    join ".$table_prefix."site_tmplvars tv
-    on tv.id=cv.tmplvarid
-
-    where tv.name='stoimost'
-) b
-on a.okypaemost_content=b.stoimost_content
--- ----------------------------------
-
-) res
-where res.stoimost>330000
+  function encodestring($str)
+  {
+    // переводим в транслит
+    $str = rus2translit($str);
+    // в нижний регистр
+    $str = strtolower($str);
+    // заменям все ненужное нам на "-"
+    $str = preg_replace('~[^-a-z0-9_]+~u', '-', $str);
+    // удаляем начальные и конечные '-'
+    $str = trim($str, "-");
 
 
-)";
+    return $str;
+  }
 
-       // echo $sql;
-
-
-        $prd='';
-        $i=0;
-        foreach ($modx->query($sql) as $product)
-        {
-            $prd.=",".$product['id'];
-            $i++;
-        }
-        $res['count']=$i;
-        if($prd!='') $prd=substr($prd, 1);
-        $res['res']=$prd;
-        $res['sql']=$sql;
-        echo json_encode($res);
-
-    }
-
-    function GetContentTV($content_id)
-    {
-        global $modx;
-        global $table_prefix;
+  function FilterForm()
+  {
+    global $modx;
+    global $table_prefix;
+    include "templates/tplFiltrForm.php";
+  }
 
 
-        $sql_tv = "select
+  function Search()
+  {
+    global $modx;
+    global $table_prefix;
+    include "templates/tplSearch.php";
+  }
+
+  function GetContentTV($content_id)
+  {
+    global $modx;
+    global $table_prefix;
+
+
+    $sql_tv = "select
                             tv.name,
                             cv.value
 
@@ -199,45 +90,45 @@ where res.stoimost>330000
 
                             where cv.contentid=" . $content_id;
 
-        // echo $sql_tv;
-        foreach ($modx->query($sql_tv) as $row_tv) {
-            $tv[$row_tv['name']] = $row_tv['value'];
-        }
-        return $tv;
+    // echo $sql_tv;
+    foreach ($modx->query($sql_tv) as $row_tv) {
+      $tv[$row_tv['name']] = $row_tv['value'];
     }
+    return $tv;
+  }
 
-
-    // объявление метода
+  // объявление метода
+  /**
+   * фунция вывода в каталог товаров по их категориям
+   */
   public function MainPage()
   {
 
     global $modx;
-
+    $parent = $_GET['parent'];
     $start = $_GET['start'] + 0;
     $count = $_GET['count'] + 0;
+    $sqlTV = "SELECT elements FROM bg63_site_tmplvars WHERE id=58";
+    foreach ($modx->query($sqlTV) as $xx) {
+      $elem = $xx['elements'];
+    }
+    $elem = explode("||", $elem);
+    foreach ($elem as $dd) {
+
+    }
+
+
     $sql = 'select
-
-(select count(*) n from bg63_site_content cc1
-join  bg63_site_tmplvar_contentvalues cv
-                        on cv.contentid=cc1.id
-
-                        JOIN bg63_site_tmplvars tv ON tv.id=cv.tmplvarid
-
-
-
-                        where (cc1.template=2)and(tv.name="prodano") ) nn,
-
-                         content.*
-                        from bg63_site_content content
-                        join  bg63_site_tmplvar_contentvalues cv
-                        on cv.contentid=content.id
-
-                        JOIN bg63_site_tmplvars tv ON tv.id=cv.tmplvarid
-
-
-
-                        where (content.template=2)and(tv.name="prodano")
-
+    (select count(*) n from bg63_site_content cc1
+    join  bg63_site_tmplvar_contentvalues cv
+    on cv.contentid=cc1.id
+    JOIN bg63_site_tmplvars tv
+    ON tv.id=cv.tmplvarid
+    where (cc1.template=2)and(cv.value LIKE "%' . $parent . '%")) nn, content.* from bg63_site_content content
+    join  bg63_site_tmplvar_contentvalues cv
+    on cv.contentid=content.id
+    JOIN bg63_site_tmplvars tv ON tv.id=cv.tmplvarid
+    where (content.template=2)and(cv.value like "%' . $parent . '%")
                         limit ' . $start . ', ' . $count . '
         ';
 
@@ -272,7 +163,9 @@ join  bg63_site_tmplvar_contentvalues cv
             <div class="product_img_list_layer"></div>
             <div class="prevSlider">
               <div class="item"></div>
-              <div class="item"><img src="<?php echo "/UpLoad/" . $tv['id'] . "/0.jpg"; ?>" alt=""></div>
+              <div class="item">
+                <img src="<?php echo "/UpLoad/" . $tv['id'] . "/0.jpg"; ?>" alt="">
+              </div>
               <div class="item"></div>
             </div>
           </div>
@@ -283,12 +176,18 @@ join  bg63_site_tmplvar_contentvalues cv
 
           <div class="product_buy_buttons">
             <ul class="product_buy_buttons_list" id="product_id_<?php echo $product['id']; ?>">
-              <li onclick="ProductDescription(<?php echo $product['uri']; ?>);">
-                <i class="product-icons product-icons-list"></i><span>Подробнее</span>
+              <li onclick1="ProductDescription('<?php echo $product['uri']; ?>');">
+                <a href="<?php echo $product['uri']; ?>">
+                  <i class="product-icons product-icons-list"></i><span>Подробнее</span></a>
               </li>
-              <li onclick="AddToCard(<?php echo $product['id']; ?>);"><i class="product-icons product-icons-bag"></i><span>В портфель</span></li>
-              <li><i class="product-icons product-icons-money"></i><span>Поторговаться</span></li>
-              <li><i class="product-icons product-icons-printer"></i><span>Распечатать</span></li>
+              <li class="add_to_portfel" onclick="AddToCard(<?php echo $product['id']; ?>); jQuery('#mess_portfel').arcticmodal(); setTimeout(function () {      $('#mess_portfel').arcticmodal('close');      }, 1000);">
+                <i class="product-icons product-icons-bag"></i><span>В портфель</span></li>
+              <li onclick="jQuery('#mess_potorg').arcticmodal();">
+                <i class="product-icons product-icons-money"></i><span>Поторговаться</span></li>
+              <li>
+                <a href="<?php echo $product['uri']; ?>#print">
+                  <i class="product-icons product-icons-printer"></i><span>Распечатать</span></a>
+              </li>
             </ul>
           </div>
         </div>
@@ -321,182 +220,222 @@ join  bg63_site_tmplvar_contentvalues cv
   }
 
 
-    function AddToCard($product_id,$count=1)
-    {
-        global $modx;
-        if(isset($_SESSION['product_'.$_GET['product_id']]))
-        {
-            unset($_SESSION['product_'.$_GET['product_id']]);
-            echo   json_encode(array("status"=>"0","count"=>$this->GetCardCountProduct(),"panel_text"=> $this->Panel_GetCardCount())); //удалили из корзины
+  function AddToCard($product_id, $count = 1)
+  {
+    global $modx;
+    if (isset($_SESSION['product_' . $_GET['product_id']])) {
+      unset($_SESSION['product_' . $_GET['product_id']]);
+      echo json_encode(array("status" => "0", "count" => $this->GetCardCountProduct(), "panel_text" => $this->Panel_GetCardCount())); //удалили из корзины
 
-        }
-        else
-        {
-            $_SESSION['product_'.$_GET['product_id']]=mysql_escape_string($_GET['product_count']);
-            echo   json_encode(array("status"=>"1","count"=>$this->GetCardCountProduct(),"panel_text"=> $this->Panel_GetCardCount())); //добавили
-        }
     }
-
-    //возвращает кол-во продуктов в корзине
-    function GetCardCountProduct()
-    {
-        $cc=0;
-        foreach($_SESSION as $key=>$value)
-        {
-            if(substr($key,0,3)=='pro') $cc=$cc+$value;
-            //echo $key." ".$value." ".substr($key,0,3);
-
-
-        }
-        return $cc;
+    else {
+      $_SESSION['product_' . $_GET['product_id']] = mysql_escape_string($_GET['product_count']);
+      echo json_encode(array("status" => "1", "count" => $this->GetCardCountProduct(), "panel_text" => $this->Panel_GetCardCount())); //добавили
     }
+  }
 
+  //возвращает кол-во продуктов в корзине
+  function GetCardCountProduct()
+  {
+    $cc = 0;
+    foreach ($_SESSION as $key => $value) {
+      if (substr($key, 0, 3) == 'pro') $cc = $cc + $value;
+      //echo $key." ".$value." ".substr($key,0,3);
+
+
+    }
+    return $cc;
+  }
+
+  //Колл-во продуктов в корзине
+  function Panel_GetCardCount()
+  {
+    $count = $this->GetCardCountProduct();
+    if ($count == 0) {
+      $count = 'Пусто';
+    }
+    elseif ($count == 1) {
+      $count = 'У Вас 2 объект';
+    }
+    elseif (($count == 2) or ($count == 3) or ($count == 4)) {
+      $count = 'У Вас ' . $count . ' объекта';
+    }
+    else $count = 'У Вас ' . $count . ' объектов';
+
+    return $count;
+  }
+
+  function ShowCard()
+  {
+    global $modx;
+    global $table_prefix;
+    include "templates/tplCard.php";
+  }
+
+
+  function GlobalSnipet($scriptProperties)
+  {
+    global $modx;
     //Колл-во продуктов в корзине
-    function Panel_GetCardCount()
-    {
-        $count=$this->GetCardCountProduct();
-        if($count==0)
-        {
-            $count='Пусто';
-        }
-        elseif($count==1)
-        {
-            $count='У Вас 2 объект';
-        }
-        elseif(($count==2)or($count==3)or($count==4))
-        {
-            $count='У Вас '.$count.' объекта';
-        }
-        else $count='У Вас '.$count.' объектов';
-
-        return $count;
+    if ($scriptProperties['action'] == 'Panel_GetCardCount') {
+      echo $this->Panel_GetCardCount();
+    }
+    elseif ($scriptProperties['action'] == 'ShowCard') {
+      $this->ShowCard();
+    }
+    elseif ($scriptProperties['action'] == 'FilterForm') {
+      $this->FilterForm();
     }
 
-    function ShowCard()
-    {
-        global $modx;
-        global $table_prefix;
-        include "templates/tplCard.php";
-    }
+  }
 
 
-    function GlobalSnipet($scriptProperties)
-    {
-        global $modx;
+  //Инфо по продукту
+  function GetProductInfo($product_id)
+  {
+    global $modx;
+    global $table_prefix;
 
-        //Колл-во продуктов в корзине
-        if($scriptProperties['action']=='Panel_GetCardCount')
-        {
-           echo $this->Panel_GetCardCount();
-        }
-        elseif($scriptProperties['action']=='ShowCard')
-        {
-            $this->ShowCard();
-        } elseif($scriptProperties['action']=='FilterForm')
-        {
-            $this->FilterForm();
-        }
+    $sql = "select * from " . $table_prefix . "site_content where id=" . $product_id;
+    foreach ($modx->query($sql) as $row) {
+      $product = new stdClass();
+      $product->id = $row['id'];
+      $product->introtext = $row['introtext'];
+      $product->description = $row['description'];
+      $product->title = $row['pagetitle'];
+      $product->url = $row['uri'];
+      //теперь дополнительные поля
+      // - 1 - если это подарки, то тут нету дополнительных цен
+      $tv = $this->GetContentTV($product_id);
+      $product->tv = $tv;
 
     }
+    return $product;
 
+  }
 
-    //Инфо по продукту
-    function GetProductInfo($product_id)
-    {
-        global $modx;
-        global $table_prefix;
-
-        $sql = "select * from " . $table_prefix . "site_content where id=" . $product_id;
-        foreach ($modx->query($sql) as $row) {
-            $product = new stdClass();
-            $product->id = $row['id'];
-            $product->introtext = $row['introtext'];
-            $product->description = $row['description'];
-            $product->title = $row['pagetitle'];
-            $product->url = $row['uri'];
-            //теперь дополнительные поля
-            // - 1 - если это подарки, то тут нету дополнительных цен
-            $tv = $this->GetContentTV($product_id);
-            $product->tv = $tv;
-
-        }
-        return $product;
-
-    }
-
-    function SphereList()
-    {
-        global $modx;
-        global $table_prefix;
-        $sql_sphere="select  distinct
+  function SphereList()
+  {
+    global $modx;
+    global $table_prefix;
+    $sql_sphere = "select  distinct
             tv.name,
             cv.value
 
-            from ".$table_prefix."site_tmplvar_contentvalues cv
+            from " . $table_prefix . "site_tmplvar_contentvalues cv
 
-            join ".$table_prefix."site_tmplvars tv
+            join " . $table_prefix . "site_tmplvars tv
             on tv.id=cv.tmplvarid
 
             where tv.name='vid_name'
             ;";
 
-        $temp=array();
-        foreach ($modx->query($sql_sphere) as $row_sphere)
-        {
-            $tmp[]=$row_sphere['value'];
+    $temp = array();
+    foreach ($modx->query($sql_sphere) as $row_sphere) {
+      $tmp[] = $row_sphere['value'];
+    }
+    return $tmp;
+  }
+
+  /*Сделать страницы со сферами бизнса*/
+  function GetSphereList()
+  {
+    //$dd=$this
+  }
+
+
+  /*Для акса вывода при поиске одного товара*/
+  function GetProductSingle($product_id)
+  {
+
+    $product = $this->GetProductInfo($product_id);
+    ?>
+    <div class="product_item">
+      <div class="product_title">
+        <?php echo $product->title; ?>
+        <span>id <?php echo $product->id; ?></span>
+      </div>
+      <div class="product_img">
+        <div class="product_img_list">
+          <div class="product_img_list_layer"></div>
+          <div class="prevSlider">
+            <div class="item"></div>
+            <div class="item">
+              <img src="<?php echo "/UpLoad/" . $product->id . "/0.jpg"; ?>" alt="">
+            </div>
+            <div class="item"></div>
+          </div>
+        </div>
+
+        <div class="product_buy_info" style="display:none">
+          <i class="product-icons product-icons-flag"></i> Срочная продажа
+        </div>
+
+        <div class="product_buy_buttons">
+          <ul class="product_buy_buttons_list" id="product_id_<?php echo $product->id; ?>">
+            <li onclick="ProductDescription(<?php echo $product->url; ?>);">
+              <i class="product-icons product-icons-list"></i><span>Подробнее</span>
+            </li>
+            <li onclick="AddToCard(<?php echo $product->id; ?>);">
+              <i class="product-icons product-icons-bag"></i><span>В портфель</span></li>
+            <li><i class="product-icons product-icons-money"></i><span>Поторговаться</span></li>
+            <li><i class="product-icons product-icons-printer"></i><span>Распечатать</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="product_info">
+        <ul class="product_info_list">
+
+          <li><span>Расположение</span><span><?php echo $product->tv['mestopolojenie']; ?></span></li>
+          <li>
+            <span>Стоимость</span><span><?php echo $product->tv['stoimost'] . " " . $product->tv['razm_stoimosti']; ?></span>
+          </li>
+          <li><span>Окупаемость</span><span><?php echo $product->tv['okypaemost']; ?></span></li>
+          <li><span>Доход в месяц</span><span></span></li>
+        </ul>
+      </div>
+    </div>
+  <?php
+  }
+
+
+    //Получить продукт по его втутреннему номеру (отдельное TV)
+    function GetProductByInnerID($Inner_ID)
+    {
+        global $modx;
+        global $table_prefix;
+
+        $product_id=0;
+
+        $sql="select
+    tv.name inner_id_title,
+    cv.value inner_id,
+    cv.contentid inner_id_content
+
+    from ".$table_prefix."site_tmplvar_contentvalues cv
+
+    join ".$table_prefix."site_tmplvars tv
+    on tv.id=cv.tmplvarid
+
+    where tv.name='inner_id'
+
+having  inner_id='".$Inner_ID."'";
+
+        // echo $sql_tv;
+        foreach ($modx->query($sql) as $row_tv) {
+           $product_id=$row_tv['id'];
         }
-        return $tmp;
+        return $product_id;
     }
 
 
-    /*Для акса вывода при поиске одного товара*/
-    function GetProductSingle($product_id)
+    //Пописывает в поля картинки из папки
+    function UploadProductsImg()
     {
-
-        $product=$this->GetProductInfo($product_id);
-        ?>
-        <div class="product_item">
-            <div class="product_title">
-                <?php echo $product->title; ?>
-                <span>id <?php echo $product->id; ?></span>
-            </div>
-            <div class="product_img">
-                <div class="product_img_list">
-                    <div class="product_img_list_layer"></div>
-                    <div class="prevSlider">
-                        <div class="item"></div>
-                        <div class="item"><img src="<?php echo "/UpLoad/" . $product->id . "/0.jpg"; ?>" alt=""></div>
-                        <div class="item"></div>
-                    </div>
-                </div>
-
-                <div class="product_buy_info" style="display:none">
-                    <i class="product-icons product-icons-flag"></i> Срочная продажа
-                </div>
-
-                <div class="product_buy_buttons">
-                    <ul class="product_buy_buttons_list" id="product_id_<?php echo $product->id; ?>">
-                        <li onclick="ProductDescription(<?php echo $product->url; ?>);">
-                            <i class="product-icons product-icons-list"></i><span>Подробнее</span>
-                        </li>
-                        <li onclick="AddToCard(<?php echo $product->id; ?>);"><i class="product-icons product-icons-bag"></i><span>В портфель</span></li>
-                        <li><i class="product-icons product-icons-money"></i><span>Поторговаться</span></li>
-                        <li><i class="product-icons product-icons-printer"></i><span>Распечатать</span></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="product_info">
-                <ul class="product_info_list">
-
-                    <li><span>Расположение</span><span><?php echo $product->tv['mestopolojenie']; ?></span></li>
-                    <li><span>Стоимость</span><span><?php echo $product->tv['stoimost'] . " " .$product->tv['razm_stoimosti']; ?></span></li>
-                    <li><span>Окупаемость</span><span><?php echo $product->tv['okypaemost']; ?></span></li>
-                    <li><span>Доход в месяц</span><span></span></li>
-                </ul>
-            </div>
-        </div>
-        <?php
+        global $modx;
+        global $table_prefix;
+        include "templates/fncUploadProductsImg.php";
     }
 
 }

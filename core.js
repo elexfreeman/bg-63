@@ -52,7 +52,9 @@ function Search()
             dohodnost:dohodnost,
             vlj_min:vlj_min,
             vlj_max:vlj_max,
-            srok:srok
+            srok:srok,
+            sphere:sphere
+
         },
         function (data)
         {
@@ -61,19 +63,27 @@ function Search()
             arr=arr.split(',');
             var count=parseInt(data.count);
             var i=0;
+            console.info(data.sql);
 
 
-            //if(count>0)
+            if(count>0)
 
+            {
                 /*Херим все*/
                 $(".product_list").html("");
 
 
-            //Запихиваем найденные значения для последующего использования
-            $("#emptyProduct").attr('startProduct','30');
-            $("#emptyProduct").attr('arr',data.res);
-            $("#emptyProduct").attr('count',count);
-            PrintProducts(0,arr,count);
+                //Запихиваем найденные значения для последующего использования
+                $("#emptyProduct").attr('startProduct','30');
+                $("#emptyProduct").attr('arr',data.res);
+                $("#emptyProduct").attr('count',count);
+                PrintProducts(0,arr,count);
+            }
+            else
+            {
+                $(".product_list").html("<h2 class='search-res-h2'>Поиск не дал результатов</h2>");
+            }
+
 
 
 

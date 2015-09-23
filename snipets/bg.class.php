@@ -11,16 +11,21 @@ class BG
 {
 
 
-  function LeftMenu(){
+  function LeftMenu()
+  {
     global $modx;
     $sql = "SELECT * from bg63_site_content WHERE parent=1175";
     echo "<ul>";
     foreach ($modx->query($sql) as $dd) {
+      $sqlKoll = "SELECT count(*) n FROM bg63_site_tmplvar_contentvalues WHERE value LIKE '%" . $dd['pagetitle'] . "%'";
+      foreach ($modx->query($sqlKoll) as $ww) {
+        $n = $ww['n'];
+      }
       ?>
       <li>
-        <a href="<?php echo $dd['uri']; ?>"><?php echo $dd['pagetitle']; ?></a>
+        <a href="<?php echo $dd['uri']; ?>">(<?php echo $n; ?>) <?php echo $dd['pagetitle']; ?></a>
       </li>
-      <?php
+    <?php
     }
 
   }

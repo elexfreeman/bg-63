@@ -284,8 +284,13 @@ join  bg63_site_tmplvar_contentvalues cv
           <div class="product_buy_buttons">
             <ul class="product_buy_buttons_list" id="product_id_<?php echo $product['id']; ?>">
               <li onclick="ProductDescription(<?php echo $product['uri']; ?>);">
+                <i class="product-icons product-icons-list"></i><span>Подробнее</span>
+              <li onclick="ProductDescription(<?php echo $product['uri']; ?>);">
                 <a href="<?php echo $product['uri']; ?>"><i class="product-icons product-icons-list"></i><span>Подробнее</span></a>
               </li>
+              <li onclick="AddToCard(<?php echo $product['id']; ?>);"><i class="product-icons product-icons-bag"></i><span>В портфель</span></li>
+              <li><i class="product-icons product-icons-money"></i><span>Поторговаться</span></li>
+              <li><i class="product-icons product-icons-printer"></i><span>Распечатать</span></li>
               <li onclick="AddToCard(<?php echo $product['id']; ?>); $('#mess_portfel').arcticmodal(); setTimeout(function () {
 			$('#mess_portfel').arcticmodal('close');}, 1000);"><i class="product-icons product-icons-bag"></i><span>В портфель</span></li>
               <li onclick="jQuery('#mess_potorg').arcticmodal()"><i class="product-icons product-icons-money"></i><span>Поторговаться</span></li>

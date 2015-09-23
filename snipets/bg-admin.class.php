@@ -793,28 +793,64 @@ where cv.contentid=".$row['id'];
 
     }
 
-    function ProductUdate()
+    function ProductUpdate()
     {
         global $modx;
-  /*      echo "<pre>";
-        print_r($_POST);
-        echo "</pre>";
-*/
-        $product_id=$_POST['product_id'];
 
-        foreach ($_POST as $key=>$value)
-        {
-            $sql="update bg63_site_tmplvar_contentvalues set
-`value`='".$value."'
-where (contentid=30)and(tmplvarid=
+        $productId = $_POST['product_id'];
 
-(
-select id from bg63_site_tmplvars where name='".$key."'
+        foreach ($_POST as $key => $value) {
 
-));" ;
+            if ($key == "action" || $key == "product_id" || $key == "name"){continue;}
 
-            $modx->query($sql);
-            echo $sql."<br>";
+            if (is_array($value)) {
+
+                $insertVal = implode("||", $value);
+
+            }
+            else {
+
+                $insertVal = $value;
+
+            }
+
+            if ($key == "areatype_input" && !empty($value)) {
+
+                $aretypeValueQuery = $modx->query("SELECT `elements` FROM bg63_site_tmplvars WHERE `name` = 'areatype'");
+                $aretypeValue = $aretypeValueQuery->fetchColumn() . " || " . $value;
+                $modx->query("UPDATE bg63_site_tmplvars SET `elements` = '{$aretypeValue}' WHERE `name` = 'areatype'");
+
+            }
+
+            $checkQuery = $modx->query("SELECT id FROM bg63_site_tmplvar_contentvalues WHERE tmplvarid=(SELECT id FROM bg63_site_tmplvars where name='{$key}') AND contentid = {$productId} LIMIT 1");
+            if($checkQuery->rowCount() > 0) {
+
+                $fieldId = $checkQuery->fetchColumn();
+                $updateQuery = "UPDATE bg63_site_tmplvar_contentvalues SET value = '{$insertVal}' WHERE id = {$fieldId}";
+                $modx->query($updateQuery);
+
+                echo $updateQuery."<br>";
+
+            }
+            else {
+
+                $tvIdQuery = $modx->query("(SELECT id FROM bg63_site_tmplvars where name='{$key}')");
+                $tvId = $tvIdQuery->fetchColumn();
+                if ($tvId != "") {
+                    $insertQuery = "INSERT INTO bg63_site_tmplvar_contentvalues (tmplvarid, contentid, value)
+                                    VALUES ({$tvId}, {$productId}, '{$insertVal}')";
+                    $modx->query($insertQuery);
+
+                    echo $insertQuery."<br>";
+
+                }
+                else {
+
+                    echo "tv not found:{$key}<br/>";
+
+                }
+            }
+
 
         }
 
@@ -1189,7 +1225,8 @@ where cv.contentid=" . $row['id'];
                                           id="field-9"
                                           type="text"
                                           placeholder="Example Text"
-                                          name="field-9">
+                                          value="<?=$tv['photo1']?>"
+                                          name="photo1">
                             </div>
                             <div class="w-col w-col-6">
                                 <label for="field-10">Фото 2:</label>
@@ -1197,7 +1234,8 @@ where cv.contentid=" . $row['id'];
                                                        id="field-10"
                                                        type="text"
                                                        placeholder="Example Text"
-                                                       name="field-10"
+                                                       value="<?=$tv['photo2']?>"
+                                                       name="photo2"
 
                                                        data-name="Field 10">
                             </div>
@@ -1209,7 +1247,8 @@ where cv.contentid=" . $row['id'];
                                                        id="field-11"
                                                        type="text"
                                                        placeholder="Example Text"
-                                                       name="field-11"
+                                                       value="<?=$tv['photo3']?>"
+                                                       name="photo3"
 
                                                        data-name="Field 11">
                             </div>
@@ -1219,7 +1258,8 @@ where cv.contentid=" . $row['id'];
                                                        id="field-12"
                                                        type="text"
                                                        placeholder="Example Text"
-                                                       name="field-12"
+                                                       value="<?=$tv['photo4']?>"
+                                                       name="photo4"
 
                                                        data-name="Field 12">
                             </div>

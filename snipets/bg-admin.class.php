@@ -191,6 +191,7 @@ on a.id=d.id";
         $tvArray = explode("||", $sqlPageTv->fetchColumn());
         foreach($areatypes as $areatype)
         {
+
             if (in_array($areatype, $tvArray)) {
 
                 $qs[] = array(
@@ -209,6 +210,7 @@ on a.id=d.id";
             }
 
         }
+
         return $qs;
     }
 
@@ -830,6 +832,9 @@ where cv.contentid=".$row['id'];
 
     }
 
+    /**
+     *
+     */
     function ProductUpdate()
     {
         global $modx;
@@ -838,14 +843,15 @@ where cv.contentid=".$row['id'];
 
         foreach ($_POST as $key => $value) {
 
-            if ($key == "action" || $key == "product_id" || $key == "name"){continue;}
+            if ($key == "action" || $key == "product_id" || $key == "name") {
+                continue;
+            }
 
             if (is_array($value)) {
 
                 $insertVal = implode("||", $value);
 
-            }
-            else {
+            } else {
 
                 $insertVal = $value;
 
@@ -854,23 +860,29 @@ where cv.contentid=".$row['id'];
             if ($key == "areatype_input" && !empty($value)) {
 
                 $aretypeValueQuery = $modx->query("SELECT `elements` FROM bg63_site_tmplvars WHERE `name` = 'areatype'");
-                $aretypeValue = $aretypeValueQuery->fetchColumn() . " || " . $value;
+                $aretypeValue = $aretypeValueQuery->fetchColumn() . "||" . trim($value);
                 $modx->query("UPDATE bg63_site_tmplvars SET `elements` = '{$aretypeValue}' WHERE `name` = 'areatype'");
+
+                $areatypeQ = $modx->query("SELECT value from bg63_site_tmplvar_contentvalues WHERE contentid={$productId} AND tmplvarid=2");
+
+                $areatypeValue = $areatypeQ->fetchColumn();
+                $insertVal = $areatypeValue  . "||{$value}";
+                $key = "areatype";
+                var_dump($insertVal);
 
             }
 
             $checkQuery = $modx->query("SELECT id FROM bg63_site_tmplvar_contentvalues WHERE tmplvarid=(SELECT id FROM bg63_site_tmplvars where name='{$key}') AND contentid = {$productId} LIMIT 1");
-            if($checkQuery->rowCount() > 0) {
+            if ($checkQuery->rowCount() > 0) {
 
                 $fieldId = $checkQuery->fetchColumn();
                 $updateQuery = "UPDATE bg63_site_tmplvar_contentvalues SET value = '{$insertVal}' WHERE id = {$fieldId}";
 
                 $modx->query($updateQuery);
 
-                echo $updateQuery."<br>";
+                echo $updateQuery . "<br>";
 
-            }
-            else {
+            } else {
 
                 $tvIdQuery = $modx->query("(SELECT id FROM bg63_site_tmplvars where name='{$key}')");
                 $tvId = $tvIdQuery->fetchColumn();
@@ -879,10 +891,9 @@ where cv.contentid=".$row['id'];
                                     VALUES ({$tvId}, {$productId}, '{$insertVal}')";
                     $modx->query($insertQuery);
 
-                    echo $insertQuery."<br>";
+                    echo $insertQuery . "<br>";
 
-                }
-                else {
+                } else {
 
                     echo "tv not found:{$key}<br/>";
 
@@ -954,7 +965,11 @@ where cv.contentid=" . $row['id'];
 
                             <div class="w-col w-col-6">
                                 <label for="name-3">Тип помещения:</label>
+                                <div class="w-checkbox w-clearfix">
+                                    <input type="hidden" name="areatype[]" value="">
 
+
+                                </div>
                                 <?php
 
                                 $areatypes = $this->GetCurrentAreaTypes(2, $row['id']);
@@ -964,7 +979,7 @@ where cv.contentid=" . $row['id'];
                                     ?>
                                     <div class="w-checkbox w-clearfix">
                                         <input class="w-checkbox-input checkbox" id="areatype[]-<?php echo $i; ?>"
-                                               type="checkbox" <?php if ($areatype['checked']) echo '"checked" = "checked"'?> data-name="areatype[]" value="<?php echo $areatype['value']; ?>"
+                                               type="checkbox" <?php if ($areatype['checked']) echo 'checked = "checked"'?> data-name="areatype[]" value="<?php echo $areatype['value']; ?>"
                                                name="areatype[]">
 
                                         <label class="w-form-label" for="areatype[]-<?php echo $i; ?>"><?php echo $areatype['value']; ?></label>
@@ -1002,11 +1017,13 @@ where cv.contentid=" . $row['id'];
                         <div class="w-row edit-add-row">
                             <div class="w-col w-col-6"><label for="name-5">Оценка эксперта:</label>
 
-                                <div class="w-checkbox w-clearfix"><input class="w-checkbox-input checkbox"
+                                <div class="w-checkbox w-clearfix">
+                                    <input type="hidden" name="valuation" value=""/>
+                                    <input class="w-checkbox-input checkbox"
                                                                           id="valuation"
                                                                           type="checkbox" data-name="valuation"
                                                                           name="valuation"
-                                                                          <?php if($tv['valuation'] == "on") echo '"checked" = "checked"'?>
+                                                                          <?php if($tv['valuation'] == "on") echo 'checked = "checked"'?>
                                                                             ><label class="w-form-label
                                                                                                   for="valuation">Да/Нет</label>
                                 </div>
@@ -1038,7 +1055,7 @@ where cv.contentid=" . $row['id'];
                             <div class="w-col w-col-6"><label for="tehhar">Технические характеристики
                                     объекта:</label><textarea
                                     class="w-input" id="tehhar" placeholder="Example Text" name="tehhar"
-                                    data-name="tehhar"></textarea></div>
+                                    data-name="tehhar"><?=$tv['tehhar']?></textarea></div>
                             <div class="w-col w-col-6"><label for="proizv">Производимая продукция, виды
                                     услуг:</label><input
                                     class="w-input" id="proizv" type="text"
@@ -1049,6 +1066,7 @@ where cv.contentid=" . $row['id'];
                         <div class="w-row edit-add-row">
                             <div class="w-col w-col-6"><label for="srok">Срок существования предприятия:</label><input
                                     class="w-input" id="srok" type="text" placeholder="1 год" name="srok"
+                                    value="<?=$tv['srok']?>"
                                     data-name="srok">
                             </div>
                             <div class="w-col w-col-6"><label for="kolsot">Количество сотрудников:</label><input
@@ -1090,8 +1108,7 @@ where cv.contentid=" . $row['id'];
 
                             <div class="w-col w-col-6"><?php
 
-                                $ttt = $this->tvSelectOutput($row['id'], 'district');
-                                echo $ttt;
+                                echo $this->tvSelectOutput($row['id'], 'district');
 
                                 ?></div>
                         </div>
@@ -1140,10 +1157,10 @@ where cv.contentid=" . $row['id'];
                             </div>
                             <div class="w-col w-col-6"><label for="nemact">Нематериальные активы:</label><textarea
                                     class="w-input"
-                                    id="nemact"  value="<?php echo $tv['nemact'];?>"
+                                    id="nemact"
                                     placeholder="Example Text"
                                     name="nemact"
-                                    data-name="nemact"></textarea>
+                                    data-name="nemact"><?=$tv['nemact']?></textarea>
                             </div>
                         </div>
                         <h2 class="content-h2">основные фонды:</h2>
@@ -1222,9 +1239,11 @@ where cv.contentid=" . $row['id'];
                             <div class="w-col w-col-6"><label for="field-6">Срочная продажа:</label>
 
                                 <div class="w-checkbox w-clearfix">
+                                    <input type="hidden" name="fastsale" value=""/>
                                     <input class="w-checkbox-input checkbox"
                                           id="fastsale"
                                           type="checkbox" data-name="fastsale"
+                                        <?php if($tv['fastsale'] == "on") echo 'checked = "checked"'?>
                                           name="fastsale"><label class="w-form-label"
                                                                  for="fastsale">Да/Нет</label>
                                 </div>
@@ -1235,28 +1254,30 @@ where cv.contentid=" . $row['id'];
                                 <label for="field-8">Продано:</label>
 
                                 <div class="w-checkbox w-clearfix">
+                                    <input type="hidden" name="prodano" value=""/>
                                     <input class="w-checkbox-input checkbox" id="prodano"
                                                                           type="checkbox" data-name="prodano"
+                                        <?php if($tv['prodano'] == "on") echo 'checked = "checked"'?>
                                                                           name="prodano">
                                     <label class="w-form-label" for="prodano">Да/Нет</label></div>
                                 </div>
                                 <div class="w-col w-col-6">
                                     <label for="field-6">Продажа в лизинг:</label>
                                 <div class="w-checkbox w-clearfix">
+                                    <input type="hidden" name="leasing" value=""/>
                                     <input class="w-checkbox-input checkbox" id="leasing"
                                                                           type="checkbox" data-name="leasing"
+                                        <?php if($tv['leasing'] == "on") echo 'checked = "checked"'?>
                                                                           name="leasing">
                                     <label class="w-form-label" for="leasing">Да/Нет</label>
                                 </div>
                             </div>
                         </div>
-                        <label for="vid">Относится к группе:</label><select class="w-select" id="vid" name="vid"
-                                                                            data-name="vid">
-                            <option value="">Select one...</option>
-                            <option value="First">First Choice</option>
-                            <option value="Second">Second Choice</option>
-                            <option value="Third">Third Choice</option>
-                        </select>
+                        <?php
+
+                        echo $this->tvSelectOutput($row['id'], 'vid');
+
+                        ?>
 
                         <div class="w-row edit-add-row">
                             <div class="w-col w-col-6">

@@ -175,6 +175,43 @@ on a.id=d.id";
         return $qs;
     }
 
+    function GetCurrentAreaTypes($tvId, $contentId)
+    {
+        global $modx;
+        $sql="select * from bg63_site_tmplvars where name='areatype'";
+
+        foreach ($modx->query($sql) as $row)
+        {
+            $areatypes=$row['elements'];
+        }
+
+        $areatypes = explode('||',$areatypes);
+        $qs = array();
+        $sqlPageTv = $modx->query("select value from bg63_site_tmplvar_contentvalues where tmplvarid = {$tvId} AND contentid={$contentId} LIMIT 1");
+        $tvArray = explode("||", $sqlPageTv->fetchColumn());
+        foreach($areatypes as $areatype)
+        {
+            if (in_array($areatype, $tvArray)) {
+
+                $qs[] = array(
+                                'value'   => $areatype,
+                                'checked' => 1
+                );
+
+            }
+            else {
+
+                $qs[] = array(
+                    'value'   => $areatype,
+                    'checked' => 0
+                );
+
+            }
+
+        }
+        return $qs;
+    }
+
     //Возвращает массив пользователей-менеджеров
     function GetManagerList()
     {
@@ -827,6 +864,7 @@ where cv.contentid=".$row['id'];
 
                 $fieldId = $checkQuery->fetchColumn();
                 $updateQuery = "UPDATE bg63_site_tmplvar_contentvalues SET value = '{$insertVal}' WHERE id = {$fieldId}";
+
                 $modx->query($updateQuery);
 
                 echo $updateQuery."<br>";
@@ -899,7 +937,7 @@ where cv.contentid=" . $row['id'];
                                id="name"
                                type="text"
                                placeholder="inner_id"
-                               name="name" value="<?php echo $tv['inner_id'];?>"
+                               name="inner_id" value="<?php echo $tv['inner_id'];?>"
                                data-name="Name">
 
                         <div class="w-row edit-add-row">
@@ -918,17 +956,18 @@ where cv.contentid=" . $row['id'];
                                 <label for="name-3">Тип помещения:</label>
 
                                 <?php
-                                $areatypes=$this->GetAreaTypes();
-                                $i=1;
-                                foreach($areatypes as $areatype)
+
+                                $areatypes = $this->GetCurrentAreaTypes(2, $row['id']);
+                                $i = 1;
+                                foreach ($areatypes as $areatype)
                                 {
                                     ?>
                                     <div class="w-checkbox w-clearfix">
                                         <input class="w-checkbox-input checkbox" id="areatype[]-<?php echo $i; ?>"
-                                               type="checkbox" data-name="areatype[]" value="<?php echo $areatype; ?>"
+                                               type="checkbox" <?php if ($areatype['checked']) echo '"checked" = "checked"'?> data-name="areatype[]" value="<?php echo $areatype['value']; ?>"
                                                name="areatype[]">
 
-                                        <label class="w-form-label" for="areatype[]-<?php echo $i; ?>"><?php echo $areatype; ?></label>
+                                        <label class="w-form-label" for="areatype[]-<?php echo $i; ?>"><?php echo $areatype['value']; ?></label>
                                     </div>
                                 <?php
                                     $i++;
@@ -966,7 +1005,9 @@ where cv.contentid=" . $row['id'];
                                 <div class="w-checkbox w-clearfix"><input class="w-checkbox-input checkbox"
                                                                           id="valuation"
                                                                           type="checkbox" data-name="valuation"
-                                                                          name="valuation"><label class="w-form-label"
+                                                                          name="valuation"
+                                                                          <?php if($tv['valuation'] == "on") echo '"checked" = "checked"'?>
+                                                                            ><label class="w-form-label
                                                                                                   for="valuation">Да/Нет</label>
                                 </div>
                             </div>
@@ -984,6 +1025,7 @@ where cv.contentid=" . $row['id'];
                                     например,
                                     100)</label><input class="w-input" id="dolya" type="text" placeholder="100"
                                                        name="dolya"
+                                                       value="<?=$tv['dolya']?>"
                                                        data-name="dolya"></div>
                             <div class="w-col w-col-6"><label for="tip">Тип предприятия:</label><input
                                     class="w-input input1"
@@ -1045,15 +1087,13 @@ where cv.contentid=" . $row['id'];
                                     name="mestopolojenie"
                                     data-name="mestopolojenie">
                             </div>
-                            <div class="w-col w-col-6"><label for="district">Район:</label><select class="w-select"
-                                                                                                   id="district"
-                                                                                                   name="district"
-                                                                                                   data-name="district">
-                                    <option value="">Select one...</option>
-                                    <option value="First">First Choice</option>
-                                    <option value="Second">Second Choice</option>
-                                    <option value="Third">Third Choice</option>
-                                </select></div>
+
+                            <div class="w-col w-col-6"><?php
+
+                                $ttt = $this->tvSelectOutput($row['id'], 'district');
+                                echo $ttt;
+
+                                ?></div>
                         </div>
                         <h2 class="content-h2">Финансовая картина:</h2>
 
@@ -1884,6 +1924,37 @@ where cv.contentid=".$row['id'];
             $tmp[]=$row_sphere['value'];
         }
         return $tmp;
+    }
+
+    function tvSelectOutput ($contentId, $tvName) {
+
+        global $modx;
+
+        $result = '';
+
+        $tv = $modx->getObject('modTemplateVar',array('name'=>$tvName));
+        $tvs = explode("||", $tv->get('elements'));
+        $tvCaption = $tv->get('caption');
+        $page = $modx->getObject('modResource', $contentId);
+        $contentTv = $page->getTVValue($tvName);
+        $result = '<label for="district">'.$tvCaption.'</label><select class="w-select"
+                                                               id="'.$tvName.'"
+                                                               name="'.$tvName.'"
+                                                               data-name="'.$tvName.'">
+
+                                                        ';
+        foreach ($tvs as $value) {
+            if ($value == $contentTv) {
+                $result.= '<option value="'.$value.'" selected="selected">'.$value.'</option>';
+            }
+            else {
+                $result.= '<option value="'.$value.'">'.$value.'</option>';
+            }
+        }
+
+        $result.= ' </select>';
+
+        return $result;
     }
 
 }

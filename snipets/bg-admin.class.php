@@ -861,7 +861,7 @@ where cv.contentid=".$row['id'];
 
                 $aretypeValueQuery = $modx->query("SELECT `elements` FROM bg63_site_tmplvars WHERE `name` = 'areatype'");
                 $aretypeValue = $aretypeValueQuery->fetchColumn() . "||" . trim($value);
-                $modx->query("UPDATE bg63_site_tmplvars SET `elements` = '{$aretypeValue}' WHERE `name` = 'areatype'");
+                $modx->query("UPDATE bg63_site_tmplvars SET `elements` = '".mysql_escape_string($aretypeValue)."' WHERE `name` = 'areatype'");
 
                 $areatypeQ = $modx->query("SELECT value from bg63_site_tmplvar_contentvalues WHERE contentid={$productId} AND tmplvarid=2");
 
@@ -876,7 +876,7 @@ where cv.contentid=".$row['id'];
             if ($checkQuery->rowCount() > 0) {
 
                 $fieldId = $checkQuery->fetchColumn();
-                $updateQuery = "UPDATE bg63_site_tmplvar_contentvalues SET value = '{$insertVal}' WHERE id = {$fieldId}";
+                $updateQuery = "UPDATE bg63_site_tmplvar_contentvalues SET value = '".mysql_escape_string($insertVal)."' WHERE id = {$fieldId}";
 
                 $modx->query($updateQuery);
 
@@ -888,7 +888,7 @@ where cv.contentid=".$row['id'];
                 $tvId = $tvIdQuery->fetchColumn();
                 if ($tvId != "") {
                     $insertQuery = "INSERT INTO bg63_site_tmplvar_contentvalues (tmplvarid, contentid, value)
-                                    VALUES ({$tvId}, {$productId}, '{$insertVal}')";
+                                    VALUES ({$tvId}, {$productId}, '".mysql_escape_string($insertVal)."')";
                     $modx->query($insertQuery);
 
                     echo $insertQuery . "<br>";
@@ -906,7 +906,9 @@ where cv.contentid=".$row['id'];
     }
 
 
-
+    /**
+     *
+     */
     function ProductEdit()
     {
         global $modx;
@@ -948,7 +950,7 @@ where cv.contentid=" . $row['id'];
                                id="name"
                                type="text"
                                placeholder="inner_id"
-                               name="inner_id" value="<?php echo $tv['inner_id'];?>"
+                               name="inner_id" value="<?=htmlspecialchars($tv['inner_id'])?>"
                                data-name="Name">
 
                         <div class="w-row edit-add-row">
@@ -959,7 +961,7 @@ where cv.contentid=" . $row['id'];
                                        placeholder="Продуктовый магазин"
                                        name="nazvanie"
                                        data-name="nazvanie"
-                                       value="<?php echo $row['pagetitle'];?>"
+                                       value="<?=htmlspecialchars($tv['nazvanie'])?>"
                                     >
                             </div>
 
@@ -979,10 +981,10 @@ where cv.contentid=" . $row['id'];
                                     ?>
                                     <div class="w-checkbox w-clearfix">
                                         <input class="w-checkbox-input checkbox" id="areatype[]-<?php echo $i; ?>"
-                                               type="checkbox" <?php if ($areatype['checked']) echo 'checked = "checked"'?> data-name="areatype[]" value="<?php echo $areatype['value']; ?>"
+                                               type="checkbox" <?php if ($areatype['checked']) echo 'checked = "checked"'?> data-name="areatype[]" value="<?=htmlspecialchars($areatype['value']) ?>"
                                                name="areatype[]">
 
-                                        <label class="w-form-label" for="areatype[]-<?php echo $i; ?>"><?php echo $areatype['value']; ?></label>
+                                        <label class="w-form-label" for="areatype[]-<?php echo $i; ?>"><?=htmlspecialchars($areatype['value'])?></label>
                                     </div>
                                 <?php
                                     $i++;
@@ -1002,7 +1004,7 @@ where cv.contentid=" . $row['id'];
                                     1000000)</label><input class="w-input" id="stoimost" type="text"
                                                            placeholder="970000"
                                                            name="stoimost"
-                                                           value="<?php echo $tv['stoimost'];?>"
+                                                           value="<?=htmlspecialchars($tv['stoimost'])?>"
 
                                                            data-name="stoimost"></div>
                             <div class="w-col w-col-6"><label for="razm_stoimosti">Размерность стоимости:<br>
@@ -1010,7 +1012,7 @@ where cv.contentid=" . $row['id'];
                                 <input class="w-input"
                                     id="razm_stoimosti"
                                     type="text" placeholder="руб."
-                                    name="razm_stoimosti"  value="<?php echo $tv['razm_stoimosti'];?>"
+                                    name="razm_stoimosti"  value="<?=htmlspecialchars($tv['razm_stoimosti'])?>"
                                     data-name="razm_stoimosti">
                             </div>
                         </div>
@@ -1033,7 +1035,7 @@ where cv.contentid=" . $row['id'];
                                     id="opf"
                                     type="text"
                                     placeholder="ООО"
-                                    name="opf" value="<?php echo $tv['opf'];?>"
+                                    name="opf" value="<?=htmlspecialchars($tv['opf'])?>"
                                     data-name="opf">
                             </div>
                         </div>
@@ -1042,11 +1044,11 @@ where cv.contentid=" . $row['id'];
                                     например,
                                     100)</label><input class="w-input" id="dolya" type="text" placeholder="100"
                                                        name="dolya"
-                                                       value="<?=$tv['dolya']?>"
+                                                       value="<?=htmlspecialchars($tv['dolya'])?>"
                                                        data-name="dolya"></div>
                             <div class="w-col w-col-6"><label for="tip">Тип предприятия:</label><input
                                     class="w-input input1"
-                                    id="tip" type="text" value="<?php echo $tv['tip'];?>"
+                                    id="tip" type="text" value="<?=htmlspecialchars($tv['tip'])?>"
                                     placeholder="Сфера красоты и здоровья"
                                     name="tip" data-name="tip">
                             </div>
@@ -1055,23 +1057,23 @@ where cv.contentid=" . $row['id'];
                             <div class="w-col w-col-6"><label for="tehhar">Технические характеристики
                                     объекта:</label><textarea
                                     class="w-input" id="tehhar" placeholder="Example Text" name="tehhar"
-                                    data-name="tehhar"><?=$tv['tehhar']?></textarea></div>
+                                    data-name="tehhar"><?=htmlspecialchars($tv['tehhar'])?></textarea></div>
                             <div class="w-col w-col-6"><label for="proizv">Производимая продукция, виды
                                     услуг:</label><input
                                     class="w-input" id="proizv" type="text"
                                     placeholder="Продажа лекарственных препаратов и приборов мед.назначения"
-                                    name="proizv"   value="<?php echo $tv['proizv'];?>"
+                                    name="proizv"   value="<?=htmlspecialchars($tv['proizv'])?>"
                                     data-name="proizv"></div>
                         </div>
                         <div class="w-row edit-add-row">
                             <div class="w-col w-col-6"><label for="srok">Срок существования предприятия:</label><input
                                     class="w-input" id="srok" type="text" placeholder="1 год" name="srok"
-                                    value="<?=$tv['srok']?>"
+                                    value="<?=htmlspecialchars($tv['srok'])?>"
                                     data-name="srok">
                             </div>
                             <div class="w-col w-col-6"><label for="kolsot">Количество сотрудников:</label><input
                                     class="w-input"
-                                    id="kolsot" value="<?php echo $tv['kolsot'];?>"
+                                    id="kolsot" value="<?=htmlspecialchars($tv['kolsot'])?>"
                                     type="text"
                                     placeholder="9"
                                     name="kolsot"
@@ -1082,7 +1084,7 @@ where cv.contentid=" . $row['id'];
                             <div class="w-col w-col-6"><label for="uppersonal">Управляющий персонал:</label><input
                                     class="w-input"
                                     id="uppersonal"
-                                    type="text" value="<?php echo $tv['uppersonal'];?>"
+                                    type="text" value="<?=htmlspecialchars($tv['uppersonal'])?>"
                                     placeholder="1"
                                     name="uppersonal"
                                     data-name="uppersonal">
@@ -1090,7 +1092,7 @@ where cv.contentid=" . $row['id'];
                             <div class="w-col w-col-6"><label for="fondzp">Фонд заработной платы:</label><input
                                     class="w-input"
                                     id="fondzp"
-                                    type="text" value="<?php echo $tv['fondzp'];?>"
+                                    type="text" value="<?=htmlspecialchars($tv['fondzp'])?>"
                                     placeholder="100000"
                                     name="fondzp"
                                     data-name="fondzp">
@@ -1099,7 +1101,7 @@ where cv.contentid=" . $row['id'];
                         <div class="w-row edit-add-row">
                             <div class="w-col w-col-6"><label for="mestopolojenie">Месторасположение:</label><input
                                     class="w-input"
-                                    id="mestopolojenie" value="<?php echo $tv['mestopolojenie'];?>"
+                                    id="mestopolojenie" value="<?=htmlspecialchars($tv['mestopolojenie'])?>"
                                     type="text"
                                     placeholder="г.Самара, Ленинский район"
                                     name="mestopolojenie"
@@ -1118,7 +1120,7 @@ where cv.contentid=" . $row['id'];
                             <div class="w-col w-col-6"><label for="nalogrejim">Налоговый режим:</label><input
                                     class="w-input"
                                     id="nalogrejim"
-                                    type="text" value="<?php echo $tv['nalogrejim'];?>"
+                                    type="text" value="<?=htmlspecialchars($tv['nalogrejim'])?>"
                                     placeholder="УСН"
                                     name="nalogrejim"
                                     data-name="nalogrejim">
@@ -1126,7 +1128,7 @@ where cv.contentid=" . $row['id'];
                             <div class="w-col w-col-6"><label for="dolg">Долговые обязательства:</label><input
                                     class="w-input"
                                     id="dolg" type="text"
-                                    name="dolg" value="<?php echo $tv['dolg'];?>"
+                                    name="dolg" value="<?=htmlspecialchars($tv['dolg'])?>"
                                     data-name="dolg">
                             </div>
                         </div>
@@ -1134,14 +1136,14 @@ where cv.contentid=" . $row['id'];
                             <div class="w-col w-col-6"><label for="invest">Необходимость инвестиций:</label><input
                                     class="w-input"
                                     id="invest"
-                                    type="text" value="<?php echo $tv['invest'];?>"
+                                    type="text" value="<?=htmlspecialchars($tv['invest'])?>"
                                     name="invest"
                                     data-name="invest">
                             </div>
                             <div class="w-col w-col-6"><label for="prichina">Причина продажи:</label><input
                                     class="w-input"
                                     id="prichina"
-                                    type="text" value="<?php echo $tv['prichina'];?>"
+                                    type="text" value="<?=htmlspecialchars($tv['prichina'])?>"
                                     placeholder="Личные обстоятельства"
                                     name="prichina"
                                     data-name="prichina">
@@ -1151,7 +1153,7 @@ where cv.contentid=" . $row['id'];
                             <div class="w-col w-col-6"><label for="okypaemost">Срок окупаемости:</label><input
                                     class="w-input"
                                     id="okypaemost"
-                                    type="text" value="<?php echo $tv['okypaemost'];?>"
+                                    type="text" value="<?=htmlspecialchars($tv['okypaemost'])?>"
                                     name="okypaemost"
                                     data-name="okypaemost">
                             </div>
@@ -1160,7 +1162,7 @@ where cv.contentid=" . $row['id'];
                                     id="nemact"
                                     placeholder="Example Text"
                                     name="nemact"
-                                    data-name="nemact"><?=$tv['nemact']?></textarea>
+                                    data-name="nemact"><?=htmlspecialchars($tv['nemact'])?></textarea>
                             </div>
                         </div>
                         <h2 class="content-h2">основные фонды:</h2>
@@ -1169,7 +1171,7 @@ where cv.contentid=" . $row['id'];
                             <div class="w-col w-col-6"><label for="nedvijimost">Недвижимость:</label><input
                                     class="w-input"
                                     id="nedvijimost"
-                                    type="text"  value="<?php echo $tv['nedvijimost'];?>"
+                                    type="text"  value="<?=htmlspecialchars($tv['nedvijimost'])?>"
                                     name="nedvijimost"
                                     data-name="nedvijimost">
                             </div>
@@ -1177,7 +1179,7 @@ where cv.contentid=" . $row['id'];
                                     class="w-input"
                                     id="area" type="text"
                                     placeholder="100000"
-                                    name="area" value="<?php echo $tv['area'];?>"
+                                    name="area" value="<?=htmlspecialchars($tv['area'])?>"
                                     data-name="area">
                             </div>
                         </div>
@@ -1185,14 +1187,14 @@ where cv.contentid=" . $row['id'];
                             <div class="w-col w-col-6"><label for="tep">Средства производства:</label><input
                                     class="w-input"
                                     id="tep"
-                                    type="text" value="<?php echo $tv['tep'];?>"
+                                    type="text" value="<?=htmlspecialchars($tv['tep'])?>"
                                     name="tep"
                                     data-name="tep">
                             </div>
                             <div class="w-col w-col-6"><label for="sert">Сертификаты и лицензии:</label><input
                                     class="w-input"
                                     id="sert" type="text"
-                                    name="sert" value="<?php echo $tv['sert'];?>"
+                                    name="sert" value="<?=htmlspecialchars($tv['sert'])?>"
                                     data-name="sert">
                             </div>
                         </div>
@@ -1205,14 +1207,14 @@ where cv.contentid=" . $row['id'];
                                             id="status"
                                             placeholder="Example Text"
                                             name="status"
-                                            data-name="status"><?php echo $tv['status'];?></textarea>
+                                            data-name="status"><?=htmlspecialchars($tv['status'])?></textarea>
                             </div>
                             <div class="w-col w-col-6"><label for="kommentarii">Комментарии:</label><textarea
                                     class="w-input"
                                     id="kommentarii"
                                     placeholder="Example Text"
                                     name="kommentarii"
-                                    data-name="kommentarii"><?php echo $tv['kommentarii'];?></textarea>
+                                    data-name="kommentarii"><?=htmlspecialchars($tv['kommentarii'])?></textarea>
                             </div>
                         </div>
                         <div class="w-row edit-add-row">
@@ -1286,7 +1288,7 @@ where cv.contentid=" . $row['id'];
                                           id="field-9"
                                           type="text"
                                           placeholder="Example Text"
-                                          value="<?=$tv['photo1']?>"
+                                          value="<?=htmlspecialchars($tv['photo1'])?>"
                                           name="photo1">
                             </div>
                             <div class="w-col w-col-6">
@@ -1295,7 +1297,7 @@ where cv.contentid=" . $row['id'];
                                                        id="field-10"
                                                        type="text"
                                                        placeholder="Example Text"
-                                                       value="<?=$tv['photo2']?>"
+                                                       value="<?=htmlspecialchars($tv['photo2'])?>"
                                                        name="photo2"
 
                                                        data-name="Field 10">
@@ -1308,7 +1310,7 @@ where cv.contentid=" . $row['id'];
                                                        id="field-11"
                                                        type="text"
                                                        placeholder="Example Text"
-                                                       value="<?=$tv['photo3']?>"
+                                                       value="<?=htmlspecialchars($tv['photo3'])?>"
                                                        name="photo3"
 
                                                        data-name="Field 11">
@@ -1319,7 +1321,7 @@ where cv.contentid=" . $row['id'];
                                                        id="field-12"
                                                        type="text"
                                                        placeholder="Example Text"
-                                                       value="<?=$tv['photo4']?>"
+                                                       value="<?=htmlspecialchars($tv['photo4'])?>"
                                                        name="photo4"
 
                                                        data-name="Field 12">

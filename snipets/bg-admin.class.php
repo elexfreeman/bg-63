@@ -868,7 +868,6 @@ where cv.contentid=".$row['id'];
                 $areatypeValue = $areatypeQ->fetchColumn();
                 $insertVal = $areatypeValue  . "||{$value}";
                 $key = "areatype";
-                var_dump($insertVal);
 
             }
 
@@ -880,8 +879,6 @@ where cv.contentid=".$row['id'];
 
                 $modx->query($updateQuery);
 
-                echo $updateQuery . "<br>";
-
             } else {
 
                 $tvIdQuery = $modx->query("(SELECT id FROM bg63_site_tmplvars where name='{$key}')");
@@ -891,17 +888,16 @@ where cv.contentid=".$row['id'];
                                     VALUES ({$tvId}, {$productId}, '".mysql_escape_string($insertVal)."')";
                     $modx->query($insertQuery);
 
-                    echo $insertQuery . "<br>";
-
                 } else {
 
-                    echo "tv not found:{$key}<br/>";
+                    //echo "tv not found:{$key}<br/>";
 
                 }
             }
 
-
         }
+
+        echo "Сохранено";
 
     }
 

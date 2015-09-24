@@ -2644,3 +2644,10 @@ tr:hover .e-button, tr:hover .w-button {
 		
 	}
 }
+
+
+.edit-label
+{
+    margin:5px 0 0 0;
+    text-align: center;
+}

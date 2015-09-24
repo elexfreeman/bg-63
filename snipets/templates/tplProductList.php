@@ -209,7 +209,7 @@ order by c.last_name
 
                     </nav>
                 </div>
-                <div style="margin:5px 0 0 0;text-align: left"><a href="/manager_list">Редактировать</a></div>
+                <div class="edit-label" ><a href="/bg-admin/manager-list/">Редактировать</a></div>
             </div>
             <div class="w-col w-col-5 w-col-stack row-maanger">
                 <p class="main-head-text">Сфера бизнеса: <br>
@@ -290,8 +290,9 @@ where tv.name='vid_name'
                         ?>
 
                     </nav>
+                    <!-- -->
                 </div>
-
+                <div  class="edit-label" ><a href=" /bg-admin/buisnes-sphere-admin/">Редактировать</a></div>
             </div>
             <div class="w-col w-col-3 w-col-stack">
                 <a href="/bgadmin/add">

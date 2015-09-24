@@ -28,4 +28,11 @@ switch($_GET['action']){
   case "specList":
     $BG->GetFastList($_GET['parent']);
     break;
+  case "GetProductListGotov":
+    $BG->GetProductListGotov();
+    break;
+    case "CardRemove":
+    $BG->CardRemove(mysql_escape_string($_GET['product_id']));
+    break;
+
 }

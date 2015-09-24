@@ -204,3 +204,21 @@ function AppendProduct2(product_id) {
     }, "html"
   ); //$.get  END
 }
+
+
+function CardRemove(product_id)
+{
+    $.get(
+    "ajax.html",
+    {
+        //log1:1,
+        action: "CardRemove",
+        product_id: product_id
+    },
+    function (data) {
+        location.reload();
+
+    }, "html"
+); //$.get  END
+
+}

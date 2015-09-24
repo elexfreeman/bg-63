@@ -2325,7 +2325,7 @@ img {
 
 .head-container {
     margin-right: 0px;
-    padding-top: 51px;
+   /* padding-top: 51px;*/
     padding-bottom: 6px;
     border-bottom: 1px solid black;
 }
@@ -2650,4 +2650,10 @@ tr:hover .e-button, tr:hover .w-button {
 {
     margin:5px 0 0 0;
     text-align: center;
+}
+
+.manager-add-button
+{
+    width: 300px;
+    margin: 0;
 }

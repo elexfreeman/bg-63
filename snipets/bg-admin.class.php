@@ -154,6 +154,27 @@ on a.id=d.id";
         return $user;
     }
 
+    //Редактирование менеджеров
+    public function ManagerEdit() {
+
+        include_once $_SERVER['DOCUMENT_ROOT'].'/snipets/manageredit.php';
+
+    }
+
+    public function GetManagerOfficeList() {
+
+        global $modx;
+
+        $document = $modx->getCollection('modResource', array(
+            'published' => 1,
+            'isfolder' => 1,
+            'parent'    => 1120
+        ));
+
+        return $document;
+
+    }
+
     //Возвращает массив типов помещений
     function GetAreaTypes()
     {
@@ -359,9 +380,25 @@ on a.uid=f.id
         include $_SERVER['DOCUMENT_ROOT']."/snipets/templates/tplProductList.php";
     }
 
-    public  function ManagerList()
+    public function ManagerList()
     {
-        include_once $_SERVER['DOCUMENT_ROOT']."/snipets/managerlist.php";
+
+        include_once $_SERVER['DOCUMENT_ROOT'] . "/snipets/managerlist.php";
+
+    }
+
+    public function ManagerUpdate()
+    {
+        global $modx;
+        $pageId = $_POST['page_id'];
+        unset($_POST['action']);
+        unset($_POST['page_id']);
+
+        $manager = $modx->getObject('modResource', $pageId);
+        foreach ($_POST as $tvName => $tvValue) {
+
+            $manager->setTVValue($tvName,$tvValue);
+        }
 
     }
 
@@ -1284,8 +1321,8 @@ where cv.contentid=" . $row['id'];
             // while (!feof($fp))
             foreach ($import_file as $key1=>$mytext)
             {
-                $kkk++;
-                $kk++;
+                //$kkk++;
+               // $kk++;
                 //$mytext = fgets($fp);
                 $tt = explode("#", $mytext);
                 echo "<pre>";
@@ -1526,6 +1563,26 @@ where cv.contentid=".$row['id'];
             });
         </script>
         <?php
+
+    }
+
+
+    //Перекключение активной кнопки меню костыль на jquery
+    function ManagerTopMenu()
+    {
+        ?>
+        <script>
+            $(function() {
+                $(".bg-admin-menu-sale").removeClass("div-button-active");
+                $(".bg-admin-menu-sale").addClass("div-button");
+
+                $(".bg-admin-menu-by").addClass("div-button-active");
+                $(".bg-admin-menu-by").removeClass("div-button");
+
+
+            });
+        </script>
+    <?php
 
     }
 

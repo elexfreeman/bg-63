@@ -62,6 +62,7 @@ if($cc>0)
                 <div class="cart_product_row">
                                 <div>
                                     <img src="<?php echo $product->tv['photo1']; ?>" alt="">
+                                    <div class="delete" onclick="CardRemove(<?php echo $product->id;?>)"></div>
                                 </div>
 
                                 <div>

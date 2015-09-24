@@ -13,9 +13,10 @@ if($cc>0)
 
     <div class="cart_wrap">
         <div class="cart">
-            <p class="title">Корзина объектов</p>
+            <p class="title">Портфель объектов</p>
 
-            <p class="cart_info"><span><i class="cart-list-icons cart-list-icons-print"></i> Распечатать список объектов</span> <span><i class="cart-list-icons cart-list-icons-send"></i> Отправить на почту</span></p>
+            <p class="cart_info"><span onclick="window.print();" class="cart_print"><i class="cart-list-icons cart-list-icons-print"></i> Распечатать список объектов</span> <span><i class="cart-list-icons cart-list-icons-send"></i> Отправить на почту</span></p>
+			<a class="border_button" href="/korzina-tovarov#form_zayav">Оформить заявку</a>
 
            <!--  <p class="sub_title">Срочная продажа</p> -->
 
@@ -99,3 +100,14 @@ if($cc>0)
 
 }
 ?>
+
+<div id="form_zayav"></div>
+<p class="cart_info"><span onclick="window.print();" class="cart_print"><i class="cart-list-icons cart-list-icons-print"></i> Распечатать список объектов</span> <span><i class="cart-list-icons cart-list-icons-send"></i> Отправить на почту</span></p>
+
+<p style="    font-size: 48px; margin-bottom: 20px; font-family: 'Panton-Light', Arial, Helvetica, sans-serif; text-transform: uppercase; color: #00c0f2;">Оформить заявку</p>
+
+<div class="cart_obr_sviaz">
+	<input type="text" name="obr_sviaz_name" placeholder="Имя" required><br>
+	<input type="text" name="obr_sviaz_phone" placeholder="Телефон" required><br>
+	<input type="submit" value="Отправить">
+</div>

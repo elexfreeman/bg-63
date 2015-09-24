@@ -12,7 +12,7 @@ $managers = $this->GetManagerList();
     <div class="w-row row-filter">
         <div class="w-col w-col-5 w-col-stack row-maanger">
             <div class="w-col w-col-3 w-col-stack">
-                <a href="/bgadmin/addmanager">
+                <a href="/bg-admin/manager-list/add.html">
                     <div class="div-button button-add" style="margin:0;">
                         <div class="div-button-text">добавить</div>
                     </div>

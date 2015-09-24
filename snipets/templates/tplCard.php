@@ -60,7 +60,7 @@ if($cc>0)
                                 ?>
                 <div class="cart_product_row">
                                 <div>
-                                    <img src="/assets/tpl/img/cart_img_example.png" alt="">
+                                    <img src="<?php echo $product->tv['photo1']; ?>" alt="">
                                 </div>
 
                                 <div>

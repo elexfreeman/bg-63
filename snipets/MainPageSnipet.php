@@ -9,17 +9,23 @@
 include_once "bg.class.php";
 $BG = new BG();
 
-if (isset($_GET['action'])) {
-    if ($_GET['action'] == 'GetProductList') {
-        $BG->MainPage();
-    } elseif ($_GET['action'] == 'AddToCard') {
-        $BG->AddToCard(mysql_escape_string($_GET['product_id']));
-    } elseif ($_GET['action'] == 'Search') {
-        $BG->Search();
-    } elseif ($_GET['action'] == 'GetProductSingle') {
-        $BG->GetProductSingle(mysql_escape_string($_GET['product_id']));
-    } elseif ($_GET['action'] == 'GetSphereList') {
-        $BG->LeftMenu();
-    }
-
+switch($_GET['action']){
+  case "GetProductList":
+    $BG->MainPage();
+    break;
+  case "AddToCard":
+    $BG->AddToCard(mysql_escape_string($_GET['product_id']));
+    break;
+  case "Search":
+    $BG->Search();
+    break;
+  case "GetProductSingle":
+    $BG->GetProductSingle(mysql_escape_string($_GET['product_id']));
+    break;
+  case "GetSphereList":
+    $BG->LeftMenu();
+    break;
+  case "specList":
+    $BG->GetFastList($_GET['parent']);
+    break;
 }

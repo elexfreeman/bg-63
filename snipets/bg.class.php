@@ -203,11 +203,9 @@ where res.stoimost>330000
 
   public function MainPage()
   {
-
     global $modx;
     global $table_prefix;
     include "templates/fncMainPage.php";
-
   }
 
   function AddToCard($product_id, $count = 1)

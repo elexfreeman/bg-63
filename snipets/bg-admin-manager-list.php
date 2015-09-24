@@ -9,6 +9,6 @@
 
 require_once __DIR__."/bg-admin.class.php";
 
-$list=new BGAdmin();
+$BGAdminModel = new BGAdmin();
 
-$list->ProductList();
+$BGAdminModel->ManagerList();

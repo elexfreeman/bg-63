@@ -290,7 +290,43 @@ join
 
 ) d
 
-on a.id=d.id";
+on a.id=d.id
+
+join
+(
+	select
+	manager.id,
+	cv.value mobile_phone
+	from bg63_site_content manager
+
+	join bg63_site_tmplvar_contentvalues cv
+	on cv.contentid=manager.id
+
+	join bg63_site_tmplvars tv
+	on tv.id=cv.tmplvarid
+	where (manager.template=12)and(tv.name='mobile_phone')
+
+) e
+on a.id=e.id
+
+join
+(
+	select
+	manager.id,
+	cv.value manager_photo
+	from bg63_site_content manager
+
+	join bg63_site_tmplvar_contentvalues cv
+	on cv.contentid=manager.id
+
+	join bg63_site_tmplvars tv
+	on tv.id=cv.tmplvarid
+	where (manager.template=12)and(tv.name='manager_photo')
+
+) f
+on a.id=f.id
+
+";
 
 
         $qs = array();
@@ -301,7 +337,14 @@ on a.id=d.id";
             $obj->first_name = $row_manager['first_name'];
             $obj->last_name = $row_manager['last_name'];
             $obj->work_phone =  $row_manager['work_phone'];
+            $obj->mobile_phone = $row_manager['mobile_phone'];
             $obj->user_id = $row_manager['user_id'];
+            $obj->page_id = $row_manager['id'];
+            $obj->manager_photo = $row_manager['manager_photo'];
+            $product = $modx->getObject('modResource',$obj->page_id);
+            $parent = $product->getOne('Parent');
+            $obj->parentTitle = $parent->get('pagetitle');
+
             //print_r($obj);
             $qs[]=$obj;
 
@@ -515,6 +558,7 @@ order by c.last_name
 
                         </nav>
                     </div>
+                    <div style="margin:5px 0 0 0;text-align: left"><a href="/manager_list">Редактировать</a></div>
                 </div>
                 <div class="w-col w-col-5 w-col-stack row-maanger">
                     <p class="main-head-text">Сфера бизнеса: <br>
@@ -829,6 +873,12 @@ where cv.contentid=".$row['id'];
             <?php
         }
 
+
+    }
+
+    public  function ManagerList()
+    {
+        include_once $_SERVER['DOCUMENT_ROOT']."/snipets/managerlist.php";
 
     }
 

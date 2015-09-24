@@ -201,6 +201,14 @@ where res.stoimost>330000
 
   }
 
+  /**
+   * функция для вывода каталога готовых фирм
+   */
+  function GetProductListGotov(){
+    global $modx;
+    include "templates/fncGotovFirm.php";
+  }
+
   public function MainPage()
   {
 
@@ -378,6 +386,11 @@ where res.stoimost>330000
     global $table_prefix;
     include "templates/fncUploadProductsImg.php";
   }
+
+    function CardRemove($product_id)
+    {
+        unset($_SESSION['product_' . $_GET['product_id']]);
+    }
 
 }
 

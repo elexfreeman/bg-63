@@ -2,7 +2,9 @@
 
 global $modx;
 $managers = $this->GetManagerList();
-var_dump($this->GetManagerList());
+
+
+
 ?>
 <div class="w-container body-container">
     <h1 class="main-container-h1">Список менеджеров</h1>
@@ -10,8 +12,8 @@ var_dump($this->GetManagerList());
     <div class="w-row row-filter">
         <div class="w-col w-col-5 w-col-stack row-maanger">
             <div class="w-col w-col-3 w-col-stack">
-                <a href="/bgadmin/add">
-                    <div class="div-button button-add" style="margin:0;">
+                <a href="/bg-admin/manager-list/add.html">
+                    <div class="div-button button-add manager-add-button">
                         <div class="div-button-text">добавить</div>
                     </div>
                 </a>
@@ -49,8 +51,9 @@ var_dump($this->GetManagerList());
             <table class="table" >
                 <tr class="div-button-active">
                     <th></th>
-                    <th>ФИО</th>
                     <th></th>
+                    <th>ФИО</th>
+
                     <th>Офис</th>
                     <th>Телефоны</th>
                     <th>Почта</th>
@@ -59,39 +62,27 @@ var_dump($this->GetManagerList());
                 <?php
 
                 foreach ($managers as $manager) {
+
+
                     ?>
                     <tr class="row-table">
-                        <td><?=$manager['manager_photo']?></td>
-                        <td><?=$manager['last_name'] . " " . $manager['first_name']?></td>
                         <td>
                             <div>
-                                <a class="e-button button-search a-button"  href="/bg-admin/edit.html?id=<?php echo $row['id'];?>"  >
+                                <a class="e-button button-search a-button"  href="/bgadmin/manager-list/manager-edit/?id=<?=$manager->page_id?>"  >
                                     <img src="/bgadmin/css/edit.png">
                                 </a>
                                 <input class="w-button button-search" type="submit" value="X" data-wait="Please wait..."></div></td>
-                        <td><?=$manager['pagetitle']?></td>
-                        <td><?=$manager['work_phone'] . " "?></td>
+                        <td><?=$manager->manager_photo?></td>
+                        <td><?=$manager->last_name . " " . $manager->first_name?></td>
+
+                        <td><?=$manager->parentTitle?></td>
+                        <td><?="раб.: " . $manager->work_phone . " моб.: ". $manager->mobile_phone?></td>
                         <td>Почта</td>
 
                     </tr>
                     <?php
 
-                    ?>
-                    <tr class="row-table">
-                        <td>Картынка</td>
-                        <td>ФИО</td>
-                        <td>
-                            <div>
-                                <a class="e-button button-search a-button"  href="/bg-admin/edit.html?id=<?php echo $row['id'];?>"  >
-                                    <img src="/bgadmin/css/edit.png">
-                                </a>
-                                <input class="w-button button-search" type="submit" value="X" data-wait="Please wait..."></div></td>
-                        <td>Офис</td>
-                        <td>Тел</td>
-                        <td>Почта</td>
 
-                    </tr>
-                    <?php
 
 
                 }

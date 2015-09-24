@@ -7,19 +7,25 @@
  */
 
 $product = $this->GetProductInfo($product_id);
+echo "<pre style='display: none'>";
+print_r($product);
+echo "</pre>";
+
 ?>
+
     <div class="product_item">
         <div class="product_title">
             <?php echo $product->title; ?>
             <span>id <?php echo $product->id; ?></span>
         </div>
+
         <div class="product_img">
             <div class="product_img_list">
                 <div class="product_img_list_layer"></div>
                 <div class="prevSlider">
                     <div class="item"></div>
                     <div class="item">
-                        <img src="<?php echo "/UpLoad/" . $product->id . "/0.jpg"; ?>" alt="">
+                        <img src="<?php echo "/images/" . $product->tv['photo1']; ?>" alt="">
                     </div>
                     <div class="item"></div>
                 </div>

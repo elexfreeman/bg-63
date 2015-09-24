@@ -26,6 +26,7 @@ if($cc>0)
 
                     <div>Наименование</div>
 
+
                     <div>Местоположение</div>
 
                     <div>Недвижимость</div>
@@ -65,7 +66,7 @@ if($cc>0)
 
                                 <div>
                                     <?php echo $product->title; ?>
-                                    <br>ID <?php echo $product->id; ?>
+                                    <br>ID <?php echo $product->tv['inner_id']; ?>
                                 </div>
 
                                 <div>
@@ -78,7 +79,7 @@ if($cc>0)
                                 </div>
 
                                 <div>
-                                    <span class="price"><?php echo $product->tv['stoimost']; ?> <?php echo $product->tv['razm_stoimosti']; ?></span>
+                                    <span class="price"><?php echo number_format(($product->tv['stoimost']+0), 0, ',', ' ');; ?> <?php echo $product->tv['razm_stoimosti']; ?></span>
                                 </div>
                 </div>
                     <?php

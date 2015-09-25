@@ -29,6 +29,14 @@ function Search() {
     }
   });
 
+  var district = '';
+  $('.district').each(function (i, elem) {
+    //console.info($(elem).text(),i);
+    if ($(elem).hasClass("active")) {
+      district = district + "||" + $(elem).html();
+    }
+  });
+
   var dohodnost = $(".input_slider_line").val();
   var vlj_min = $(".input_slider_line_2").val();
   var vlj_max = $(".input_slider_line_4").val();
@@ -46,7 +54,8 @@ function Search() {
       vlj_min: vlj_min,
       vlj_max: vlj_max,
       srok: srok,
-      sphere: sphere
+      sphere: sphere,
+      district: district
 
     },
     function (data) {

@@ -122,6 +122,51 @@ if(isset($_GET['sphere']) && !empty($_GET['sphere'])) {
     $vidWhere = " AND res.vid IN (".$vid_name.")";
 }
 
+//Условия для районов
+if(isset($_GET['district']) && !empty($_GET['district'])) {
+
+    $district_name = explode("||", mysql_escape_string($_GET['district']));
+    $district = array();
+
+    foreach ($district_name as $key=>$value) {
+
+        if (!empty($value)) {
+
+            $district[] = "\"{$value}\"";
+
+        }
+
+    }
+
+    $district_name = implode(",", $district);
+
+    $districtJoin = ""
+
+    . "-- ----------------------------------
+
+join
+(
+select
+    tv.name district_title,
+    cv.value district,
+    cv.contentid district_content
+
+    from bg63_site_tmplvar_contentvalues cv
+
+    join bg63_site_tmplvars tv
+    on tv.id=cv.tmplvarid
+
+    where tv.name='district'
+) f
+on f.district_content=b.stoimost_content";
+
+    $districtWhere = " AND res.district IN (".$district_name.")";
+
+
+}
+
+//ENDIF Условия для районов
+
 $sql=
     ""."select * from ".$table_prefix."site_content
 where id in(
@@ -180,9 +225,12 @@ select
     where tv.name='vid_name'
 ) e
 on e.vid_content=b.stoimost_content
+".$districtJoin."
 
 ) res
-where (res.stoimost>".$vlj_min.")and(res.stoimost<".$vlj_max.") ".$vidWhere."
+where (res.stoimost>".$vlj_min.")and(res.stoimost<".$vlj_max.")
+".$vidWhere."
+".$districtWhere."
 
 
 

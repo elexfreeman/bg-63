@@ -18,7 +18,7 @@ $sphereList = $BGAdminModel->SphereListElements();
 if (isset($_POST) && $_POST['action'] == "update") {
 
     $sphereList[$_POST['key']] = $_POST['name'];
-    $tv = $modx->getObject('modTemplateVar',array("name"=>"vid"));
+    $tv = $modx->getObject('modTemplateVar',array("name"=>"vid_name"));
     $tv->set('elements', implode("||", $sphereList));
     $tv->save();
 

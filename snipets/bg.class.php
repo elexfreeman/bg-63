@@ -89,7 +89,7 @@ class BG
     )
 
              * */
-
+/*
     $sql = "
 -- ----------------------------------
 
@@ -197,8 +197,8 @@ where res.stoimost>330000
     if ($prd != '') $prd = substr($prd, 1);
     $res['res'] = $prd;
     $res['sql'] = $sql;
-    echo json_encode($res);
-
+    echo json_encode($res);*/
+      include "templates/tplSearch.php";
   }
 
   /**
@@ -215,6 +215,7 @@ where res.stoimost>330000
     global $modx;
     global $table_prefix;
     include "templates/fncMainPage.php";
+
 
   }
 
@@ -254,7 +255,7 @@ where res.stoimost>330000
       $count = 'Пусто';
     }
     elseif ($count == 1) {
-      $count = 'У Вас 2 объект';
+      $count = 'У Вас 1 объект';
     }
     elseif (($count == 2) or ($count == 3) or ($count == 4)) {
       $count = 'У Вас ' . $count . ' объекта';
@@ -391,6 +392,187 @@ where res.stoimost>330000
     {
         unset($_SESSION['product_' . $_GET['product_id']]);
     }
+
+    function GetFastSaleCount()
+    {
+        global $modx;
+        global $table_prefix;
+
+        $sql="select count(*) cc from
+(
+
+-- ----------------------------------
+
+select * from
+-- 			okypaemost -------------
+(
+select
+    tv.name prodano_title,
+    cv.value prodano,
+    cv.contentid prodano_content
+
+    from bg63_site_tmplvar_contentvalues cv
+
+    join bg63_site_tmplvars tv
+    on tv.id=cv.tmplvarid
+
+    where tv.name='prodano'
+) a
+-- ----------------------------------
+left join
+(
+-- 			stoimost -------------
+select
+    tv.name stoimost_title,
+    cv.value stoimost,
+    cv.contentid stoimost_content
+
+    from bg63_site_tmplvar_contentvalues cv
+
+    join bg63_site_tmplvars tv
+    on tv.id=cv.tmplvarid
+
+    where tv.name='stoimost'
+) b
+on a.prodano_content=b.stoimost_content
+-- ----------------------------------
+left join
+(
+-- 			stoimost -------------
+select
+    tv.name fastsale_title,
+    cv.value fastsale,
+    cv.contentid fastsale_content
+
+    from bg63_site_tmplvar_contentvalues cv
+
+    join bg63_site_tmplvars tv
+    on tv.id=cv.tmplvarid
+
+    where tv.name='fastsale'
+) c
+on a.prodano_content=c.fastsale_content
+-- ----------------------------------
+having fastsale=1
+
+) v ";
+
+        $count=0;
+        foreach ($modx->query($sql) as $row) {
+            $count=$row['cc'];
+        }
+        return $count;
+    }
+
+    function GetSaleCount()
+    {
+        global $modx;
+        global $table_prefix;
+
+        $sql="select count(*) cc from
+(
+
+-- ----------------------------------
+
+select * from
+-- 			okypaemost -------------
+(
+select
+    tv.name prodano_title,
+    cv.value prodano,
+    cv.contentid prodano_content
+
+    from bg63_site_tmplvar_contentvalues cv
+
+    join bg63_site_tmplvars tv
+    on tv.id=cv.tmplvarid
+
+    where tv.name='prodano'
+) a
+-- ----------------------------------
+join
+(
+-- 			stoimost -------------
+select
+    tv.name stoimost_title,
+    cv.value stoimost,
+    cv.contentid stoimost_content
+
+    from bg63_site_tmplvar_contentvalues cv
+
+    join bg63_site_tmplvars tv
+    on tv.id=cv.tmplvarid
+
+    where tv.name='stoimost'
+) b
+on a.prodano_content=b.stoimost_content
+-- ----------------------------------
+having prodano=0
+
+) v";
+
+        $count=0;
+        foreach ($modx->query($sql) as $row) {
+            $count=$row['cc'];
+        }
+        return $count;
+    }
+
+
+    function GetSaleDoneCount()
+    {
+        global $modx;
+        global $table_prefix;
+
+        $sql="select count(*) cc from
+(
+
+-- ----------------------------------
+
+select * from
+-- 			okypaemost -------------
+(
+select
+    tv.name prodano_title,
+    cv.value prodano,
+    cv.contentid prodano_content
+
+    from bg63_site_tmplvar_contentvalues cv
+
+    join bg63_site_tmplvars tv
+    on tv.id=cv.tmplvarid
+
+    where tv.name='prodano'
+) a
+-- ----------------------------------
+join
+(
+-- 			stoimost -------------
+select
+    tv.name stoimost_title,
+    cv.value stoimost,
+    cv.contentid stoimost_content
+
+    from bg63_site_tmplvar_contentvalues cv
+
+    join bg63_site_tmplvars tv
+    on tv.id=cv.tmplvarid
+
+    where tv.name='stoimost'
+) b
+on a.prodano_content=b.stoimost_content
+-- ----------------------------------
+having prodano=1
+
+) v";
+
+        $count=0;
+        foreach ($modx->query($sql) as $row) {
+            $count=$row['cc'];
+        }
+        return $count;
+    }
+
 
 }
 

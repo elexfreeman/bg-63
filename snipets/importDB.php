@@ -85,7 +85,7 @@ join actiontypes
 on actiontypes.id=purchase.actiontype
 ";
 
-$uploadfile="/var/www/virtual-hosts/delo-bg63.aktiwork.ru/snipets/expor_p.csv";
+$uploadfile="/var/www/virtual-hosts/delo-bg63.aktiwork.ru/snipets/export1.csv";
 
 //херим данные в таблице s_products
 $tmpFile='/var/www/virtual-hosts/delo-bg63.aktiwork.ru/snipets/tmp.sql';
@@ -146,7 +146,7 @@ $count=0;
         } else {
 
             //импортируем страницы
-            $parent = 4;
+            $parent = 2;
             $template = 2;
             //Ищем такую страницу
             $pagetitle = mysql_escape_string($tt[2]);

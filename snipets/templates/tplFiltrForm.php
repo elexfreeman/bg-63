@@ -8,24 +8,23 @@
 
 <div class="filter_nav_wrap">
     <div class="filter_nav">
-        <div class="active_nav">Продажа (1231)</div>
+        <div class="active_nav" onclick="$('.product_list').html('');GetProductList(0,12,$('#parent').text())">Продажа (<?php echo $this->GetSaleCount();?>)</div>
 
-        <div class="hidden-xs">Срочная продажа (765)</div>
+        <div class="hidden-xs" onclick="GetSrochList(0,30,$('#parent').text())">Срочная продажа (<?php echo $this->GetFastSaleCount(); ?>)</div>
 
-        <div>Покупка (765)</div>
+        <div>Покупка </div>
 
-        <div class="hidden-xs">Аренда (250)</div>
+<!--        <div class="hidden-xs">Аренда (250)</div>-->
 
-        <div class="hidden-xs">Продано! (789)</div>
-    </div>
-
-    <div class="filter_nav_close hidden-xs">
-        <i class="filter-icons filter-icons-hide"></i>
+        <div class="hidden-xs">Продано! (<?php echo $this->GetSaleDoneCount(); ?>) </div>
     </div>
 </div>
 
 <div class="filter_tab">
     <div class="active_tab">
+	<div class="filter_nav_close hidden-xs">
+        <span>Фильтр</span> <i class="filter-icons filter-icons-hide"></i>
+    </div>
         <div class="filter_content">
 
             <form id="filter_form">
@@ -66,7 +65,7 @@
                     </div>
 
                     <div>
-                        <p>Выберите количество вложений</p>
+                        <p>Выберите количество вложений (руб)</p>
 
                         <div class="slider_line_wrap">
                             <span>1000 000</span> <span class="slider_line_2"></span> <span>10 000 000</span>
@@ -76,7 +75,7 @@
                     </div>
 
                     <div>
-                        <p>Выберите срок окупаемости</p>
+                        <p>Выберите срок окупаемости (мес)</p>
 
                         <div class="slider_line_wrap">
                             <span>3</span> <span class="slider_line_3"></span> <span>60</span>
@@ -239,33 +238,15 @@
     </div>
 
     <div>
-        <div class="filter_content">
-            В разработке
-        </div>
     </div>
 
     <div>
-        <div class="filter_content">
-            В разработке
-        </div>
     </div>
 
     <div>
-        <div class="filter_content">
-            В разработке
-        </div>
     </div>
 
     <div>
-        <div class="filter_content">
-            В разработке
-        </div>
-    </div>
-
-    <div>
-        <div class="filter_content">
-            В разработке
-        </div>
     </div>
 </div>
 

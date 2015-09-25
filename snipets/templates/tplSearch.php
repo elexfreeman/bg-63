@@ -100,7 +100,30 @@ $vlj_min=mysql_escape_string($_GET['vlj_min']);
 $vlj_max=mysql_escape_string($_GET['vlj_max']);
 $srok=mysql_escape_string($_GET['srok']);
 
-$sql="select * from ".$table_prefix."site_content
+//Условия для сферы деятельности
+
+if(isset($_GET['sphere']) && !empty($_GET['sphere'])) {
+
+    $vid_name = explode("||", mysql_escape_string($_GET['sphere']));
+    $vid = array();
+
+    foreach ($vid_name as $key=>$value) {
+
+        if (!empty($value)) {
+
+            $vid[] = "\"{$value}\"";
+
+        }
+
+    }
+
+    $vid_name = implode(",", $vid);
+
+    $vidWhere = " AND res.vid IN (".$vid_name.")";
+}
+
+$sql=
+    ""."select * from ".$table_prefix."site_content
 where id in(
 
 select stoimost_content from
@@ -142,11 +165,29 @@ select
 on a.okypaemost_content=b.stoimost_content
 -- ----------------------------------
 
+join
+(
+select
+    tv.name vid_title,
+    cv.value vid,
+    cv.contentid vid_content
+
+    from bg63_site_tmplvar_contentvalues cv
+
+    join bg63_site_tmplvars tv
+    on tv.id=cv.tmplvarid
+
+    where tv.name='vid_name'
+) e
+on e.vid_content=b.stoimost_content
+
 ) res
-where (res.stoimost>".$vlj_min.")and(res.stoimost<".$vlj_max.")
+where (res.stoimost>".$vlj_min.")and(res.stoimost<".$vlj_max.") ".$vidWhere."
+
 
 
 )";
+
 
 // echo $sql;
 

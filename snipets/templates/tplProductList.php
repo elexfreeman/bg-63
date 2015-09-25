@@ -409,6 +409,8 @@ where (template=2)".$searchText.$searchID." limit 50";
                     $sql="select * from bg63_site_content
 
 where (template=2)".$searchText.$searchID." limit 50";
+                   
+
 
                     foreach ($modx->query($sql) as $row)
                     {

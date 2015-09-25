@@ -84,6 +84,59 @@ function Search() {
 
 }
 
+/*
+функция вывода проданых товаров в каталог
+ */
+function GetProdanoList(start, koll, parent){
+  $.get('ajax.html',{action:'getProdanoList', start:start, koll:koll, parent:parent},
+  function(data){
+    console.info(data);
+    arr = arr.split(',');
+    var arr = data.res;
+    var count = parseInt(data.count);
+    var i = 0;
+    console.info(data.sql);
+
+    if (count > 0) {
+      /*Херим все*/
+      $(".product_list").html("");
+      //Запихиваем найденные значения для последующего использования
+      $("#emptyProduct").attr('startProduct', '12');
+      $("#emptyProduct").attr('arr', data.res);
+      $("#emptyProduct").attr('count', count);
+      PrintProducts1(0, arr, count);
+    }
+    else {
+      $(".product_list").html("<h2 class='search-res-h2'>Нет проданых</h2>");
+    }
+  },'json')
+}
+
+
+/*
+функция для вывода проданых товаров по одному
+ */
+function PrintProducts1(product_start, arr, count) {
+  var tmp = 0;
+  var kk = 0;
+  count = parseInt(count);
+  $("#emptyProduct").attr('startProduct', (parseInt(product_start) + 30));
+  for (var i = product_start; i < (parseInt(product_start) + 12); i++) {
+    if (count < i) {
+      break;
+    }
+    else {
+      AppendProduct3(arr[i]);
+    }
+  }
+  console.info(count, i);
+  if (count >= i) {
+    $('.product_list_all').remove();
+    $(".product_list").append('<div class="product_list_all" onclick="PrintProductNext()"><i class="product-icons product-icons-all"></i> Показать еще</div>');
+  }
+
+}
+
 /*Функция вывода спецпредложений товара*/
 function GetSrochList(start, koll, parent) {
   $.get('ajax.html',
@@ -205,6 +258,34 @@ function AppendProduct2(product_id) {
   ); //$.get  END
 }
 
+/*
+Функция для вывода проданых товаров(другой шаблон, удалено поле цена)
+ */
+function AppendProduct3(product_id) {
+
+  $(".product_list").append("<div id='elem_" + product_id + "'>" +
+  "<div class='product_item'>" +
+  "<div class='product-border'>" +
+  "<img class='preloader' src='loader.GIF'>" +
+  "</div>" +
+  "</div>" +
+  "</div>");
+
+  $.get(
+    "ajax.html",
+    {
+      //log1:1,
+      action: "GetProductSingleProd",
+      product_id: product_id
+    },
+    function (data) {
+      $("#elem_" + product_id).html(data);
+
+      clearTimeout(tt);
+
+    }, "html"
+  ); //$.get  END
+}
 
 function CardRemove(product_id)
 {
@@ -222,3 +303,12 @@ function CardRemove(product_id)
 ); //$.get  END
 
 }
+
+$(document).ready(function(){
+    /* Выбор сортировки */
+    $('.sort_button').click(function(){
+        //$(this).toggleClass('active');
+        $('.sort_button').removeClass('active');
+        $(this).toggleClass('active');
+    });
+});

@@ -95,19 +95,19 @@ on a.okypaemost_content=b.stoimost_content
 -- ----------------------------------
 ";
 
-$dohodnost=mysql_escape_string($_GET['dohodnost']);
-$vlj_min=mysql_escape_string($_GET['vlj_min']);
-$vlj_max=mysql_escape_string($_GET['vlj_max']);
-$srok=mysql_escape_string($_GET['srok']);
+$dohodnost = mysql_escape_string($_GET['dohodnost']);
+$vlj_min = mysql_escape_string($_GET['vlj_min']);
+$vlj_max = mysql_escape_string($_GET['vlj_max']);
+$srok = mysql_escape_string($_GET['srok']);
 
 //Условия для сферы деятельности
 
-if(isset($_GET['sphere']) && !empty($_GET['sphere'])) {
+if (isset($_GET['sphere']) && !empty($_GET['sphere'])) {
 
     $vid_name = explode("||", mysql_escape_string($_GET['sphere']));
     $vid = array();
 
-    foreach ($vid_name as $key=>$value) {
+    foreach ($vid_name as $key => $value) {
 
         if (!empty($value)) {
 
@@ -119,16 +119,16 @@ if(isset($_GET['sphere']) && !empty($_GET['sphere'])) {
 
     $vid_name = implode(",", $vid);
 
-    $vidWhere = " AND res.vid IN (".$vid_name.")";
+    $vidWhere = " AND res.vid IN (" . $vid_name . ")";
 }
 
 //Условия для районов
-if(isset($_GET['district']) && !empty($_GET['district'])) {
+if (isset($_GET['district']) && !empty($_GET['district'])) {
 
     $district_name = explode("||", mysql_escape_string($_GET['district']));
     $district = array();
 
-    foreach ($district_name as $key=>$value) {
+    foreach ($district_name as $key => $value) {
 
         if (!empty($value)) {
 
@@ -160,12 +160,53 @@ select
 ) f
 on f.district_content=b.stoimost_content";
 
-    $districtWhere = " AND res.district IN (".$district_name.")";
+    $districtWhere = " AND res.district IN (" . $district_name . ")";
 
 
 }
 
 //ENDIF Условия для районов
+
+//Условия для доходности
+
+if ((isset($_GET['dohodnost_min']) && !empty($_GET['dohodnost_min'])) && (isset($_GET['dohodnost_max']) && !empty($_GET['dohodnost_max']))) {
+
+    $dohodnostJoin = ""
+
+      . "-- ----------------------------------
+
+        join
+        (
+        select
+            tv.name dohodnost_title,
+            cv.value dohodnost,
+            cv.contentid dohodnost_content
+
+            from bg63_site_tmplvar_contentvalues cv
+
+            join bg63_site_tmplvars tv
+            on tv.id=cv.tmplvarid
+
+            where tv.name='dohodnost'
+        ) g
+        on g.dohodnost_content=b.stoimost_content";
+
+    $dohodnostWhere = " AND ((res.dohodnost>{$_GET['dohodnost_min']})and(res.dohodnost<{$_GET['dohodnost_max']}))";
+
+}
+
+
+//ENDIF Условия для доходности
+
+//Условия для окупаемости
+
+if ((isset($_GET['srok_min']) && !empty($_GET['srok_min'])) && (isset($_GET['srok_max']) && !empty($_GET['srok_max']))) {
+
+   $okypaemostWhere = " AND ((res.okypaemost>{$_GET['srok_min']})and(res.okypaemost<{$_GET['srok_max']}))";
+
+}
+
+//ENDIF Условия для доходности
 
 $sql=
     ""."select * from ".$table_prefix."site_content
@@ -225,12 +266,15 @@ select
     where tv.name='vid_name'
 ) e
 on e.vid_content=b.stoimost_content
-".$districtJoin."
+" . $districtJoin . "
+" . $dohodnostJoin . "
 
 ) res
 where (res.stoimost>".$vlj_min.")and(res.stoimost<".$vlj_max.")
 ".$vidWhere."
 ".$districtWhere."
+".$dohodnostWhere."
+".$okypaemostWhere."
 
 
 
@@ -240,15 +284,14 @@ where (res.stoimost>".$vlj_min.")and(res.stoimost<".$vlj_max.")
 // echo $sql;
 
 
-$prd='';
-$i=0;
-foreach ($modx->query($sql) as $product)
-{
-    $prd.=",".$product['id'];
+$prd = '';
+$i = 0;
+foreach ($modx->query($sql) as $product) {
+    $prd .= "," . $product['id'];
     $i++;
 }
-$res['count']=$i;
-if($prd!='') $prd=substr($prd, 1);
-$res['res']=$prd;
-$res['sql']=$sql;
+$res['count'] = $i;
+if ($prd != '') $prd = substr($prd, 1);
+$res['res'] = $prd;
+$res['sql'] = $sql;
 echo json_encode($res);

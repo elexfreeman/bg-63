@@ -13,9 +13,12 @@ require_once __DIR__."/bg.class.php";
 $BGAdminModel=new BGAdmin();
 $BGModel = new BG();
 
-if((isset($_POST['action']))and($_POST['action']=='update'))
+if((isset($_POST['action'])) && ($_POST['action']=='update'))
 {
     $BGAdminModel->ManagerUpdate();
+}
+elseif ((isset($_GET['delete'])) && (intval($_GET['delete']) > 0)){
+    $BGAdminModel->DeleteModxPage();
 }
 else
     $BGAdminModel->ManagerEdit();

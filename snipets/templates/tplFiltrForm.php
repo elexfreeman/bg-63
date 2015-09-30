@@ -12,7 +12,7 @@
 
     <div class="hidden-xs" onclick="GetSrochList(0,30,$('#parent').text())">Срочная продажа (<?php echo $this->GetFastSaleCount(); ?>)</div>
 
-    <div>Покупка</div>
+    <div onclick="getBuyList()">Покупка (<?php //echo $this->GetBuyCount(); ?>)</div>
 
     <!--        <div class="hidden-xs">Аренда (250)</div>-->
 
@@ -38,7 +38,7 @@
   </div>
 </div>
 <div class="visible-xs napBisnes">
-  <select name="bisnes" id="bisnes">
+  <select name="bisnes" id="bisnes" title="Выберите направление бизнеса">
     <option value="0">Выберите направления бизнеса</option>
     <option value="1">1</option>
     <option value="2">2</option>
@@ -99,7 +99,7 @@
   <ul class="trend_list" id="trends">
 
     <?php
-    $spheres = $this->SphereList();
+    $spheres = $this->SphereListElements();
     $kk = 0;
     foreach ($spheres as $sphere) {
       if ($kk < 6) {
@@ -298,6 +298,11 @@
         $slider_1.find(".ui-slider-handle:last").attr('data-hint', $slider_1.slider("values", 1));
         $('.input_slider_line_1').attr('value', $slider_1.slider("values", 0));
         $('.input_slider_line_5').attr('value', $slider_1.slider("values", 1));
+      },
+      stop: function( event, ui ) {
+
+        preSearch();
+
       }
     });
 
@@ -325,11 +330,12 @@
         $('.slider_line_2').find(".ui-slider-handle:last").attr('data-hint', $(".slider_line_2").slider("values", 1));
         $('.input_slider_line_2').attr('value', $(".slider_line_2").slider("values", 0));
         $('.input_slider_line_4').attr('value', $(".slider_line_2").slider("values", 1));
+      },
+        stop: function (event, ui_2) {
 
-          setTimeout(function() {  PreSearch(); }, 500)
+          preSearch();
 
-
-      }
+        }
     });
     $slider_3 = $('.slider_line_3');
     $slider_3.slider({
@@ -350,6 +356,11 @@
         $slider_3.find(".ui-slider-handle:last").attr('data-hint', $slider_3.slider("values", 1));
         $('.input_slider_line_3').attr('value', $slider_3.slider("values", 0));
         $('.input_slider_line_6').attr('value', $slider_3.slider("values", 1));
+      },
+      stop: function (event,ui_3) {
+
+        preSearch();
+
       }
     });
     $('.ui-slider-handle').addClass('hint-bottom-s-small');

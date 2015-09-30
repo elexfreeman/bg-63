@@ -9,7 +9,7 @@
 include_once "bg.class.php";
 $BG = new BG();
 
-switch($_GET['action']){
+switch ($_GET['action']) {
   case "GetProductList":
     $BG->MainPage();
     break;
@@ -31,7 +31,7 @@ switch($_GET['action']){
   case "GetProductListGotov":
     $BG->GetProductListGotov();
     break;
-    case "CardRemove":
+  case "CardRemove":
     $BG->CardRemove(mysql_escape_string($_GET['product_id']));
     break;
 

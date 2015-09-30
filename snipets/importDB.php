@@ -85,7 +85,7 @@ join actiontypes
 on actiontypes.id=purchase.actiontype
 ";
 
-$uploadfile="/var/www/virtual-hosts/delo-bg63.aktiwork.ru/snipets/export1.csv";
+$uploadfile="/var/www/virtual-hosts/delo-bg63.aktiwork.ru/snipets/business_sale.csv";
 
 //херим данные в таблице s_products
 $tmpFile='/var/www/virtual-hosts/delo-bg63.aktiwork.ru/snipets/tmp.sql';

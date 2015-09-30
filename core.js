@@ -37,12 +37,14 @@ function Search() {
     }
   });
 
-  var dohodnost = $(".input_slider_line").val();
   var vlj_min = $(".input_slider_line_2").val();
   var vlj_max = $(".input_slider_line_4").val();
-  var srok = $(".input_slider_line_3").val();
+  var srok_min = $(".input_slider_line_3").val();
+  var srok_max = $(".input_slider_line_6").val();
+  var dohodnost_min = $(".input_slider_line_1").val();
+  var dohodnost_max = $(".input_slider_line_5").val();
 
-  console.info(sphere, dohodnost, vlj_min, vlj_max, srok);
+  //console.info(sphere, dohodnost_min, vlj_min, vlj_max, srok);
   $(".product_list").html($("#emptyProduct").html());
 
   $.get(
@@ -50,10 +52,12 @@ function Search() {
     {
       //log1:1,
       action: "Search",
-      dohodnost: dohodnost,
+      dohodnost_min: dohodnost_min,
+      dohodnost_max: dohodnost_max,
       vlj_min: vlj_min,
       vlj_max: vlj_max,
-      srok: srok,
+      srok_min: srok_min,
+      srok_max: srok_max,
       sphere: sphere,
       district: district
 
@@ -89,6 +93,71 @@ function Search() {
 
       // $(".product_list").html(data);
     }, "json"
+  ); //$.get  END
+
+}
+
+
+//Предварительный поиск с выводом количества значений
+function preSearch() {
+  var sphere = '';
+  $('.sphere').each(function (i, elem) {
+    //console.info($(elem).text(),i);
+    if ($(elem).hasClass("active")) {
+      sphere = sphere + "||" + $(elem).html();
+    }
+  });
+
+  var district = '';
+  $('.district').each(function (i, elem) {
+    //console.info($(elem).text(),i);
+    if ($(elem).hasClass("active")) {
+      district = district + "||" + $(elem).html();
+    }
+  });
+
+  var dohodnost_min = $(".input_slider_line_1").val();
+  var dohodnost_max = $(".input_slider_line_5").val();
+  var vlj_min = $(".input_slider_line_2").val();
+  var vlj_max = $(".input_slider_line_4").val();
+  var srok_min = $(".input_slider_line_3").val();
+  var srok_max = $(".input_slider_line_6").val();
+
+  //console.info(sphere, dohodnost, vlj_min, vlj_max, srok);
+
+  $.get(
+      "ajax.html",
+      {
+        //log1:1,
+        action: "Search",
+        dohodnost_min: dohodnost_min,
+        dohodnost_max: dohodnost_max,
+        vlj_min: vlj_min,
+        vlj_max: vlj_max,
+        srok_min: srok_min,
+        srok_max: srok_max,
+        sphere: sphere,
+        district: district
+
+      },
+      function (data) {
+        console.info(data);
+        var arr = data.res;
+        arr = arr.split(',');
+        var count = parseInt(data.count);
+        var i = 0;
+        console.info(data.sql);
+
+        if (count > 0) {
+
+          alert(count);
+
+        }
+        else {
+          alert("ничего нет");
+        }
+
+      }, "json"
   ); //$.get  END
 
 }

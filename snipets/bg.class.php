@@ -373,6 +373,24 @@ where res.stoimost>330000
     return $tmp;
   }
 
+  /*
+     * Выбираем массив сфер деятельности (по умолчанию)
+     * */
+
+  function SphereListElements() {
+
+    global $modx;
+
+    $result = array();
+
+    $sphereTv = $modx->getObject('modTemplateVar',array('name'=>"vid_name"));
+    $sphereTvElements = $sphereTv->get('elements');
+    $result = explode("||", $sphereTvElements);
+
+    return $result;
+
+  }
+
 
   /*Для акса вывода при поиске одного товара*/
   function GetProductSingle($product_id)

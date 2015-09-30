@@ -1,6 +1,6 @@
 <?php
 
-ini_set('max_execution_time', 11111111);
+ini_set('max_execution_time', 11111);
 
 function encodestring ($str)
 {
@@ -56,7 +56,7 @@ $import_file = explode("|", $import_file);
 
 //массив тв
 $tvs = array(
-  "id",
+  "old_id",
   "row_sort",
   "nazvanie",
   "user_id",
@@ -105,23 +105,21 @@ $tvs = array(
   "vid_name"
 );
 
-$limit = 1;
-$start = 0;
 foreach ($import_file as $csvString) {
-
-  if ($start == $limit) exit;
 
   $csvArray = explode("#", $csvString);
 
+  //Создаем страницу и записываем параметры
 
   $product = $modx->newObject('modResource');
   $product->set('pagetitle', $csvArray['2']);
   $product->set('template', 2);
   $product->set('published', 1);
-  $product->set('alias', encodestring($csvArray['0'] . "_" . $csvArray['2']));
+  $product->set('alias', encodestring($csvArray['0'] . "_" . $csvArray['2'] . rand(1, 90000)));
   $product->set('parent', 2);
   $product->setContent('[[*id]][[*opf]]');
   $product->save();
+
   //пихаем тв
 
   foreach ($csvArray as $tvNum => $tvValue) {
@@ -132,9 +130,15 @@ foreach ($import_file as $csvString) {
 
     }
 
+    else {
+
+
+      //echo "Не вставляицо тв: {$tvs[$tvNum]} - {".preg_replace('/(^"|"$)/', '', $tvValue)."}";
+
+    }
+    $product->save();
+
   }
 
-  echo "1";
-
-$start++;
 }
+

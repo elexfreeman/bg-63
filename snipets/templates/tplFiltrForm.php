@@ -12,7 +12,7 @@
 
     <div class="hidden-xs" onclick="GetSrochList(0,30,$('#parent').text())">Срочная продажа (<?php echo $this->GetFastSaleCount(); ?>)</div>
 
-    <div onclick="getBuyList()">Покупка (<?php //echo $this->GetBuyCount(); ?>)</div>
+    <div onclick="getBuyList()">Покупка (<?php echo $this->GetBuyCount(); ?>)</div>
 
     <!--        <div class="hidden-xs">Аренда (250)</div>-->
 
@@ -31,9 +31,9 @@
 <div class="search_wrap hidden-xs">
   <div class="search">
     <div id="search_form">
-      <input type="text" name="search" value="" placeholder="Введите ID или название объекта">
+      <input type="text" name="search" id="nameid" value="" placeholder="Введите ID или название объекта">
 
-      <button type="submit" class="search_button" value=""><i class="filter-icons filter-icons-search"></i></button>
+      <button type="submit" class="search_button" value="" onclick="return nameIdSearch();"><i class="filter-icons filter-icons-search"></i></button>
     </div>
   </div>
 </div>
@@ -57,9 +57,9 @@
     <p>Выберите доходность (мес)</p>
 
     <div class="slider_line_wrap">
-      <span>20 000</span><span class="slider_line_1"></span><span>1 000 000</span>
-      <input class="input_slider_line_1" value="20000" hidden>
-      <input class="input_slider_line_5" value="1000000" hidden/>
+      <span>0</span><span class="slider_line_1"></span><span>1 000 0000</span>
+      <input class="input_slider_line_1" value="0" hidden>
+      <input class="input_slider_line_5" value="10000000" hidden/>
     </div>
   </div>
 
@@ -67,9 +67,9 @@
     <p>Выберите количество вложений (руб)</p>
 
     <div class="slider_line_wrap">
-      <span>1000 000</span> <span class="slider_line_2"></span> <span>10 000 000</span>
-      <input class="input_slider_line_2" value="1000000" hidden>
-      <input class="input_slider_line_4" value="10000000" hidden>
+      <span>0</span> <span class="slider_line_2"></span> <span>10 000 0000</span>
+      <input class="input_slider_line_2" value="0" hidden>
+      <input class="input_slider_line_4" value="100000000" hidden>
     </div>
   </div>
 
@@ -77,7 +77,7 @@
     <p>Выберите срок окупаемости (мес)</p>
 
     <div class="slider_line_wrap">
-      <span>3</span> <span class="slider_line_3"></span> <span>60</span>
+      <span>0</span> <span class="slider_line_3"></span> <span>120</span>
       <input class="input_slider_line_3" value="" hidden>
       <input class="input_slider_line_6" value="" hidden/>
     </div>
@@ -279,17 +279,17 @@
     /* Ползунки в фильтре */
     $slider_1 = $(".slider_line_1");
     $slider_1.slider({
-      min: 20000,
-      max: 1000000,
-      values: [20000, 1000000],
+      min: 0,
+      max: 10000000,
+      values: [0, 10000000],
       step: 1000,
       range: true,
       create: function (event, ui) {
         val_1 = $slider_1.slider('value');
-        $slider_1.find(".ui-slider-handle:first").attr('data-hint', 20000);
-        $slider_1.find(".ui-slider-handle:last").attr('data-hint', 1000000);
-        $('.input_slider_line_1').attr('value', 20000);
-        $('.input_slider_line_5').attr('value', 1000000);
+        $slider_1.find(".ui-slider-handle:first").attr('data-hint', '');
+        $slider_1.find(".ui-slider-handle:last").attr('data-hint', '');
+        $('.input_slider_line_1').attr('value', '');
+        $('.input_slider_line_5').attr('value', '');
       },
       slide: function (event, ui) {
         $('.input_slider_line').attr('value', ui.value);
@@ -301,7 +301,7 @@
       },
       stop: function( event, ui ) {
 
-        preSearch();
+        preSearch($(".slider_line_1"));
 
       }
     });
@@ -309,18 +309,18 @@
 
       //Вложения
       $('.slider_line_2').slider({
-      min: 100000,
-      max: 10000000,
-      values: [1000000, 8000000],
+      min: 0,
+      max: 100000000,
+      values: [0, 100000000],
       step: 500000,
       range: true,
       create: function (event, ui_2) {
         val_2 = $('.slider_line_2').slider('value');
         //$('.slider_line_2 .ui-slider-handle').attr('data-hint', val_2);
-        $('.slider_line_2').find(".ui-slider-handle:first").attr('data-hint', 100000);
-        $('.slider_line_2').find(".ui-slider-handle:last").attr('data-hint', 10000000);
-        $('.input_slider_line_2').attr('value', 100000);
-        $('.input_slider_line_4').attr('value', 10000000);
+        $('.slider_line_2').find(".ui-slider-handle:first").attr('data-hint', '');
+        $('.slider_line_2').find(".ui-slider-handle:last").attr('data-hint', '');
+        $('.input_slider_line_2').attr('value', '');
+        $('.input_slider_line_4').attr('value', '');
       },
       slide: function (event, ui_2) {
         //$('.slider_line_2 .ui-slider-handle').attr('data-hint', ui_2.values);
@@ -333,23 +333,23 @@
       },
         stop: function (event, ui_2) {
 
-          preSearch();
+          preSearch($('.slider_line_2'));
 
         }
     });
     $slider_3 = $('.slider_line_3');
     $slider_3.slider({
-      min: 3,
-      max: 60,
-      values: [3, 60],
+      min: 0,
+      max: 120,
+      values: [0, 120],
       step: 1,
       range: true,
       create: function (event, ui_3) {
         val_3 = $slider_3.slider('value');
-        $slider_3.find(".ui-slider-handle:first").attr('data-hint', 3);
-        $slider_3.find(".ui-slider-handle:last").attr('data-hint', 60);
-        $('.input_slider_line_3').attr('value', 3);
-        $('.input_slider_line_6').attr('value', 30);
+        $slider_3.find(".ui-slider-handle:first").attr('data-hint', '');
+        $slider_3.find(".ui-slider-handle:last").attr('data-hint', '');
+        $('.input_slider_line_3').attr('value', '');
+        $('.input_slider_line_6').attr('value', '');
       },
       slide: function (event, ui_3) {
         $slider_3.find(".ui-slider-handle:first").attr('data-hint', $slider_3.slider("values", 0));
@@ -359,7 +359,7 @@
       },
       stop: function (event,ui_3) {
 
-        preSearch();
+        preSearch($('.slider_line_3'));
 
       }
     });
@@ -368,6 +368,7 @@
     /* Выбор направлений */
     $('.trend_list li').click(function () {
       $(this).toggleClass('active');
+      preSearch($(this));
     });
   });
 </script>

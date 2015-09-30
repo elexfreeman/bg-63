@@ -26,6 +26,22 @@ class BG
     include "templates/tplFastList.php";
   }
 
+  /**
+   * функция возвращает список id проданых товаров
+   */
+  function GetProdanoList($parent)
+  {
+    global $modx;
+    include "templates/fncProdanList.php";
+  }
+
+  /**
+   * функция для вывода проданых товаров по одному
+   */
+  function GetProdanoSingle($product_id)
+  {
+    include "templates/tplProductSinglePro.php";
+  }
 
   function LeftMenu()
   {
@@ -202,9 +218,20 @@ where res.stoimost>330000
   }
 
   /**
+   * Функция для вывода количества товара
+   */
+  function GetCount($name)
+  {
+    global $modx;
+    include "templates/fntGetCount.php";
+  }
+
+
+  /**
    * функция для вывода каталога готовых фирм
    */
-  function GetProductListGotov(){
+  function GetProductListGotov()
+  {
     global $modx;
     include "templates/fncGotovFirm.php";
   }
@@ -406,10 +433,10 @@ where res.stoimost>330000
     include "templates/fncUploadProductsImg.php";
   }
 
-    function CardRemove($product_id)
-    {
-        unset($_SESSION['product_' . $_GET['product_id']]);
-    }
+  function CardRemove($product_id)
+  {
+    unset($_SESSION['product_' . $_GET['product_id']]);
+  }
 
     function GetFastSaleCount()
     {
@@ -591,6 +618,75 @@ having prodano=1
         return $count;
     }
 
+  /**
+   * Функция получения mail по фамилии менеджера
+   * @param $last_name
+   */
+  function Mail($last_name){
+    global $modx;
+    include "templates/fncMail.php";
+  }
+
+  /**
+   * Функция удаления готовго ООО
+   * @param $gotov_id
+   */
+  function Remove($remove_id){
+    global $modx;
+    include "templates/gotov/fncRemoveGotov.php";
+  }
+
+  /**
+   * функция возвращает json массив с id покупок
+   */
+  function GetBuyList(){
+    global $modx;
+    include "templates/fncGetBuyList.php";
+  }
+
+  /**
+   * Функция выводит одиночную покупку
+   * @param $product_id
+   */
+  function GetBuySingle($product_id){
+    global $modx;
+    include "templates/tplBuySungle.php";
+  }
+
+  /**
+   * функция возвращает количество покупок
+   * @return mixed
+   */
+  function GetBuyCount(){
+    global $modx;
+    $sql = "SELECT count(*) n
+FROM bg63_site_content b
+WHERE b.parent=4";
+    foreach ($modx->query($sql) as $dd) {
+      $count = $dd['n'];
+    }
+    return $count;
+
+  }
+
+  /**
+   * Функция вывода в карточку больших фотографий
+   * @param $old_id
+   */
+  function GetBigImage($old_id){
+    global $modx;
+    include "templates/tplBigFoto.php";
+  }
+
+  function GetSmallImage($old_id){
+    global $modx;
+    include "templates/tplSmallFoto.php";
+  }
+
+  function GetManager($user_id){
+    global $modx;
+    include "templates/tplManager.php";
+  }
 
 }
 

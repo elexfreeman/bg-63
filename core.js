@@ -97,9 +97,58 @@ function Search() {
 
 }
 
+//Поиск по имени и ИД
+
+function nameIdSearch() {
+
+  var searchString = $("#nameid").val();
+  $.get(
+      "ajax.html",
+      {
+        //log1:1,
+        action: "Search",
+        searchString: searchString,
+
+      },
+      function (data) {
+        console.info(data);
+        var arr = data.res;
+        arr = arr.split(',');
+        var count = parseInt(data.count);
+        var i = 0;
+        console.info(data.sql);
+
+        if (count > 0) {
+          /*Херим все*/
+          $(".product_list").html("");
+
+          //Запихиваем найденные значения для последующего использования
+          $("#emptyProduct").attr('startProduct', '30');
+          $("#emptyProduct").attr('arr', data.res);
+          $("#emptyProduct").attr('count', count);
+          PrintProducts(0, arr, count);
+        }
+        else {
+          $(".product_list").html("<h2 class='search-res-h2'>Поиск не дал результатов</h2>");
+        }
+
+        // console.info(arr);
+        /*Получить кол-во найденных объектов*/
+
+        /*Получить йих ID*/
+
+        /*Вывести первые 10 шт*/
+
+        // $(".product_list").html(data);
+      }, "json"
+  ); //$.get  END
+
+  return false;
+
+}
 
 //Предварительный поиск с выводом количества значений
-function preSearch() {
+function preSearch(el) {
   var sphere = '';
   $('.sphere').each(function (i, elem) {
     //console.info($(elem).text(),i);
@@ -123,6 +172,8 @@ function preSearch() {
   var srok_min = $(".input_slider_line_3").val();
   var srok_max = $(".input_slider_line_6").val();
 
+  var elementJobj = el;
+  $(".ttip").remove();
   //console.info(sphere, dohodnost, vlj_min, vlj_max, srok);
 
   $.get(
@@ -147,15 +198,29 @@ function preSearch() {
         var count = parseInt(data.count);
         var i = 0;
         console.info(data.sql);
+        var offset = $(elementJobj).offset();
+        var relativeX = (offset.left);
+        var relativeY = (offset.top);
 
         if (count > 0) {
+        $(elementJobj).parent().parent().append(
+              '<div class="ttip" style="position:absolute;left:'+relativeX+';top:-80px;z-index:999;background:#fff;border:1px solid #000;padding:15px;width:150px;color:#000;font-size:18pt">' +
+              'НАЙДЕНО<br/>'+count+' ОБЪЕКТОВ'+
+              '<br/><a href="#" onclick="Search();return false;">ПРОСМОТРЕТЬ</a>' +
+              '</div>'
 
-          alert(count);
 
+          );
         }
         else {
-          alert("ничего нет");
+          $(elementJobj).parent().parent().append(
+              '<div class="ttip" style="position:absolute;left:'+relativeX+';top:10px;z-index:999;background:#fff;border:1px solid #000;padding:15px;width:150px;color:#000;font-size:18pt">' +
+              'НИЧЕГО НЕ НАЙДНО' +
+              '</div>'
+          );
         }
+
+
 
       }, "json"
   ); //$.get  END

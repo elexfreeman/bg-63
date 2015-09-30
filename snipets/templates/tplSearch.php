@@ -100,6 +100,20 @@ $vlj_min = mysql_escape_string($_GET['vlj_min']);
 $vlj_max = mysql_escape_string($_GET['vlj_max']);
 $srok = mysql_escape_string($_GET['srok']);
 
+
+//Условие для стоимости
+
+if ((isset($_GET['vlj_min']) && !empty($_GET['vlj_min'])) && (isset($_GET['vlj_max']) && !empty($_GET['vlj_max']))) {
+
+  $stoimostJoin = "
+
+  ";
+
+  $stoimostWhere = " AND (res.stoimost>" . $vlj_min . ")and(res.stoimost<" . $vlj_max . ")";
+}
+
+//END условия для стоимости
+
 //Условия для сферы деятельности
 
 if (isset($_GET['sphere']) && !empty($_GET['sphere'])) {
@@ -169,7 +183,7 @@ on f.district_content=b.stoimost_content";
 
 //Условия для доходности
 
-if ((isset($_GET['dohodnost_min']) && !empty($_GET['dohodnost_min'])) && (isset($_GET['dohodnost_max']) && !empty($_GET['dohodnost_max']))) {
+if ((isset($_GET['dohodnost_min']) && !empty($_GET['dohodnost_min'])) || (isset($_GET['dohodnost_max']) && !empty($_GET['dohodnost_max']))) {
 
     $dohodnostJoin = ""
 
@@ -206,7 +220,34 @@ if ((isset($_GET['srok_min']) && !empty($_GET['srok_min'])) && (isset($_GET['sro
 
 }
 
-//ENDIF Условия для доходности
+//Условие для имени или ID
+
+if (isset($_GET['searchString']) && !empty($_GET['searchString'])) {
+
+  $nameId = mysql_escape_string($_GET['searchString']);
+  $nameIdJoin = ""
+
+    . "-- ----------------------------------
+
+        join
+        (
+        select
+            tv.name innerid_title,
+            cv.value innerid,
+            cv.contentid innerid_content
+
+            from bg63_site_tmplvar_contentvalues cv
+
+            join bg63_site_tmplvars tv
+            on tv.id=cv.tmplvarid
+
+            where tv.name='inner_id'
+        ) h
+        on h.innerid_content=b.stoimost_content";
+
+  $nameIdWhere = " AND (".$table_prefix."site_content.pagetitle LIKE '%{$nameId}%' OR res.innerid = '{$nameId}')";
+
+}
 
 $sql=
     ""."select * from ".$table_prefix."site_content
@@ -232,7 +273,9 @@ select
 
     where tv.name='okypaemost'
 ) a
--- ----------------------------------
+
+
+    -- ----------------------------------
 join
 (
 -- 			stoimost -------------
@@ -241,9 +284,9 @@ select
     cv.value stoimost,
     cv.contentid stoimost_content
 
-    from ".$table_prefix."site_tmplvar_contentvalues cv
+    from " . $table_prefix . "site_tmplvar_contentvalues cv
 
-    join ".$table_prefix."site_tmplvars tv
+    join " . $table_prefix . "site_tmplvars tv
     on tv.id=cv.tmplvarid
 
     where tv.name='stoimost'
@@ -268,13 +311,16 @@ select
 on e.vid_content=b.stoimost_content
 " . $districtJoin . "
 " . $dohodnostJoin . "
+" . $nameIdJoin . "
 
 ) res
-where (res.stoimost>".$vlj_min.")and(res.stoimost<".$vlj_max.")
-".$vidWhere."
-".$districtWhere."
-".$dohodnostWhere."
-".$okypaemostWhere."
+where 1
+" . $stoimostWhere . "
+" . $vidWhere . "
+" . $districtWhere . "
+" . $dohodnostWhere . "
+" . $okypaemostWhere . "
+" . $nameIdWhere . "
 
 
 
